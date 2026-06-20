@@ -87,6 +87,7 @@ export default function VisitForm({
       </div>
       <div>
         <button type="submit" disabled={busy}>
+          {busy && <span className="spinner" aria-hidden />}
           {busy ? "Registrando…" : "Registrar ingreso"}
         </button>
       </div>

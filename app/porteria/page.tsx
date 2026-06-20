@@ -2,6 +2,7 @@ import { getDb } from "@/lib/db";
 import { listVisitsToday } from "@/lib/visits";
 import { listSpots } from "@/lib/parking";
 import { hora } from "@/lib/format";
+import { UsersIcon, CheckCircleIcon, DotIcon, InboxIcon } from "../icons";
 import VisitForm from "./VisitForm";
 import ExitButton from "./ExitButton";
 
@@ -24,7 +25,10 @@ export default async function Porteria() {
       <p className="subtitle">Registro de ingresos y salidas de visitas.</p>
 
       <div className="panel">
-        <h2>Registrar ingreso</h2>
+        <h2>
+          <UsersIcon size={18} />
+          Registrar ingreso
+        </h2>
         <VisitForm
           units={units.rows as { label: string }[]}
           visitorSpots={visitorSpots}
@@ -32,46 +36,58 @@ export default async function Porteria() {
       </div>
 
       <div className="panel">
-        <h2>Visitas de hoy</h2>
+        <h2>
+          <CheckCircleIcon size={18} />
+          Visitas de hoy
+        </h2>
         {visits.length === 0 ? (
-          <p className="muted">Todavía no hay visitas registradas hoy.</p>
+          <div className="empty">
+            <InboxIcon size={32} />
+            <p>Todavía no hay visitas registradas hoy.</p>
+          </div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Visitante</th>
-                <th>Doc.</th>
-                <th>Unidad</th>
-                <th>Patente</th>
-                <th>Cochera</th>
-                <th>Ingreso</th>
-                <th>Estado</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {visits.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.visitor_name}</td>
-                  <td>{v.visitor_doc}</td>
-                  <td>{v.unit_label}</td>
-                  <td>{v.plate ?? "—"}</td>
-                  <td>{v.spot_label ?? "—"}</td>
-                  <td>{hora(v.entered_at)}</td>
-                  <td>
-                    {v.exited_at ? (
-                      <span className="badge ok">
-                        Salió {hora(v.exited_at)}
-                      </span>
-                    ) : (
-                      <span className="badge busy">En el edificio</span>
-                    )}
-                  </td>
-                  <td>{!v.exited_at && <ExitButton id={v.id} />}</td>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Visitante</th>
+                  <th>Doc.</th>
+                  <th>Unidad</th>
+                  <th>Patente</th>
+                  <th>Cochera</th>
+                  <th>Ingreso</th>
+                  <th>Estado</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {visits.map((v) => (
+                  <tr key={v.id}>
+                    <td>{v.visitor_name}</td>
+                    <td>{v.visitor_doc}</td>
+                    <td>{v.unit_label}</td>
+                    <td>{v.plate ?? "—"}</td>
+                    <td>{v.spot_label ?? "—"}</td>
+                    <td>{hora(v.entered_at)}</td>
+                    <td>
+                      {v.exited_at ? (
+                        <span className="badge ok">
+                          <CheckCircleIcon size={13} />
+                          Salió {hora(v.exited_at)}
+                        </span>
+                      ) : (
+                        <span className="badge busy">
+                          <DotIcon size={13} />
+                          En el edificio
+                        </span>
+                      )}
+                    </td>
+                    <td>{!v.exited_at && <ExitButton id={v.id} />}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </>

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LogOutIcon } from "../icons";
 
 export default function ExitButton({ id }: { id: number }) {
   const router = useRouter();
@@ -16,7 +17,12 @@ export default function ExitButton({ id }: { id: number }) {
 
   return (
     <button className="ghost" onClick={onClick} disabled={busy}>
-      {busy ? "…" : "Marcar salida"}
+      {busy ? (
+        <span className="spinner" aria-hidden />
+      ) : (
+        <LogOutIcon size={14} />
+      )}
+      {busy ? "Saliendo…" : "Marcar salida"}
     </button>
   );
 }

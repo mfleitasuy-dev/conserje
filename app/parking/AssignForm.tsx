@@ -69,6 +69,7 @@ export default function AssignForm({
       </div>
       <div>
         <button type="submit" disabled={busy}>
+          {busy && <span className="spinner" aria-hidden />}
           {busy ? "Asignando…" : "Asignar a residente"}
         </button>
       </div>

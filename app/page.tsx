@@ -2,6 +2,13 @@ import { getDb } from "@/lib/db";
 import { listVisitsToday } from "@/lib/visits";
 import { parkingSummary } from "@/lib/parking";
 import { hora } from "@/lib/format";
+import {
+  UsersIcon,
+  GaugeIcon,
+  CarIcon,
+  CheckCircleIcon,
+  InboxIcon,
+} from "./icons";
 
 export const dynamic = "force-dynamic";
 
@@ -20,48 +27,68 @@ export default async function Dashboard() {
 
       <div className="cards">
         <div className="card">
+          <div className="card-head">
+            <UsersIcon size={18} />
+          </div>
           <div className="num">{activas.length}</div>
           <div className="lbl">Visitas en el edificio</div>
         </div>
         <div className="card">
+          <div className="card-head">
+            <GaugeIcon size={18} />
+          </div>
           <div className="num">{visits.length}</div>
           <div className="lbl">Visitas registradas hoy</div>
         </div>
         <div className="card">
+          <div className="card-head">
+            <CarIcon size={18} />
+          </div>
           <div className="num">{parking.ocupadas}</div>
           <div className="lbl">Cocheras ocupadas</div>
         </div>
         <div className="card">
+          <div className="card-head">
+            <CheckCircleIcon size={18} />
+          </div>
           <div className="num">{parking.libres}</div>
           <div className="lbl">Cocheras libres</div>
         </div>
       </div>
 
       <div className="panel">
-        <h2>Visitas en el edificio ahora</h2>
+        <h2>
+          <UsersIcon size={18} />
+          Visitas en el edificio ahora
+        </h2>
         {activas.length === 0 ? (
-          <p className="muted">No hay visitas dentro del edificio.</p>
+          <div className="empty">
+            <InboxIcon size={32} />
+            <p>No hay visitas dentro del edificio.</p>
+          </div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Visitante</th>
-                <th>Unidad</th>
-                <th>Cochera</th>
-                <th>Ingreso</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activas.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.visitor_name}</td>
-                  <td>{v.unit_label}</td>
-                  <td>{v.spot_label ?? "—"}</td>
-                  <td>{hora(v.entered_at)}</td>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Visitante</th>
+                  <th>Unidad</th>
+                  <th>Cochera</th>
+                  <th>Ingreso</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {activas.map((v) => (
+                  <tr key={v.id}>
+                    <td>{v.visitor_name}</td>
+                    <td>{v.unit_label}</td>
+                    <td>{v.spot_label ?? "—"}</td>
+                    <td>{hora(v.entered_at)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </>
