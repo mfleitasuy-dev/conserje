@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "consorcio": {
+      "command": "npx",
+      "args": ["tsx", "mcp/src/index.ts"],
+      "env": {
+        "DATABASE_URL": "postgresql://conserje:conserje@localhost:5432/conserje"
+      }
+    }
+  }
+}
