@@ -2,6 +2,7 @@ import { getDb } from "@/lib/db";
 import { listSpots } from "@/lib/parking";
 import { CarIcon, CheckCircleIcon, DotIcon } from "../icons";
 import AssignForm from "./AssignForm";
+import FreeButton from "./FreeButton";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,7 @@ export default async function Parking() {
                   Libre
                 </span>
               )}
+              {s.occupied && <FreeButton spotLabel={s.label} />}
             </div>
           ))}
         </div>

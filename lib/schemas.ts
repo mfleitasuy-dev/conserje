@@ -17,6 +17,12 @@ export const assignSpotInput = z.object({
 });
 export type AssignSpotInput = z.infer<typeof assignSpotInput>;
 
+/** Datos para liberar una cochera ocupada. */
+export const freeSpotInput = z.object({
+  spot_label: z.string().trim().min(1),
+});
+export type FreeSpotInput = z.infer<typeof freeSpotInput>;
+
 /** Datos para publicar una noticia del consorcio. */
 export const newsInput = z.object({
   title: z.string().trim().min(1, "título requerido"),
