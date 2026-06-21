@@ -50,17 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <BuildingIcon size={18} />
                 Conserje
               </div>
-              <div className="footer-meta">
-                <nav className="footer-nav" aria-label="Pie de página">
-                  <Link href="/">Dashboard</Link>
-                  <Link href="/porteria">Portería</Link>
-                  <Link href="/parking">Cocheras</Link>
-                  <Link href="/noticias">Noticias</Link>
-                  <Link href="/alertas">Alertas</Link>
-                  <Link href="/denuncias">Denuncias</Link>
-                </nav>
-                <span className="footer-copy">© 2026 Conserje</span>
-              </div>
+              <span className="footer-copy">© 2026 Conserje</span>
             </div>
           </footer>
         </ToastProvider>
