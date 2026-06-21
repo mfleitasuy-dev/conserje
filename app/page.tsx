@@ -1,22 +1,25 @@
 import { getDb } from "@/lib/db";
 import { listVisitsToday } from "@/lib/visits";
 import { parkingSummary } from "@/lib/parking";
-import { hora } from "@/lib/format";
+import { listActiveAlerts } from "@/lib/alerts";
+import { hora, fechaHora } from "@/lib/format";
 import {
   UsersIcon,
   GaugeIcon,
   CarIcon,
   CheckCircleIcon,
   InboxIcon,
+  AlertTriangleIcon,
 } from "./icons";
 
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
   const db = getDb();
-  const [visits, parking] = await Promise.all([
+  const [visits, parking, activeAlerts] = await Promise.all([
     listVisitsToday(db),
     parkingSummary(db),
+    listActiveAlerts(db),
   ]);
   const activas = visits.filter((v) => !v.exited_at);
 
@@ -54,6 +57,51 @@ export default async function Dashboard() {
           <div className="num">{parking.libres}</div>
           <div className="lbl">Cocheras libres</div>
         </div>
+        <div className="card">
+          <div className="card-head">
+            <AlertTriangleIcon size={18} />
+          </div>
+          <div className="num">{activeAlerts.length}</div>
+          <div className="lbl">Alertas activas</div>
+        </div>
+      </div>
+
+      <div className="panel">
+        <h2>
+          <AlertTriangleIcon size={18} />
+          Alertas activas
+        </h2>
+        {activeAlerts.length === 0 ? (
+          <div className="empty">
+            <CheckCircleIcon size={32} />
+            <p>No hay alertas activas.</p>
+          </div>
+        ) : (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mensaje</th>
+                  <th>Severidad</th>
+                  <th>Creada</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activeAlerts.map((a) => (
+                  <tr key={a.id}>
+                    <td>{a.message}</td>
+                    <td>
+                      <span className={`badge sev-${a.severity}`}>
+                        {a.severity}
+                      </span>
+                    </td>
+                    <td>{fechaHora(a.created_at)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <div className="panel">

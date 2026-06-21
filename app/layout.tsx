@@ -36,6 +36,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Link href="/">Dashboard</Link>
             <Link href="/porteria">Portería</Link>
             <Link href="/parking">Cocheras</Link>
+            <Link href="/noticias">Noticias</Link>
+            <Link href="/alertas">Alertas</Link>
+            <Link href="/denuncias">Denuncias</Link>
           </nav>
         </header>
         <main className="container">{children}</main>

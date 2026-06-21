@@ -295,6 +295,32 @@ tbody tr:last-child td {
   border-color: var(--busy-border);
 }
 
+/* Severidad de alertas */
+.badge.sev-baja {
+  background: var(--ok-bg);
+  color: var(--ok);
+  border-color: var(--ok-border);
+}
+
+.badge.sev-media {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.badge.sev-alta {
+  background: var(--busy-bg);
+  color: var(--busy);
+  border-color: var(--busy-border);
+}
+
+/* Etiqueta neutra (ej. categoría de denuncia) */
+.badge.neutral {
+  background: #f1f5f9;
+  color: var(--muted);
+  border-color: var(--line);
+}
+
 /* ---------- Formularios ---------- */
 form.stack {
   display: grid;
