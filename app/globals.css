@@ -634,71 +634,73 @@ button.ghost:hover {
   }
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer (barra oscura slim, bookend del topbar) ---------- */
 .footer {
   flex-shrink: 0;
   margin-top: auto;
-  border-top: 1px solid var(--line);
-  background: var(--panel);
+  background: linear-gradient(180deg, var(--topbar), #0a2238);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .footer-inner {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 28px 24px;
+  padding: 14px 24px;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 12px 20px;
 }
 
-.footer-brand .brand {
-  color: var(--heading);
+.footer .brand {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-.footer-brand .brand svg {
-  color: var(--brand);
+.footer .brand svg {
+  color: var(--accent);
 }
 
-.footer-tagline {
-  margin: 8px 0 2px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  max-width: 42ch;
-}
-
-.footer-copy {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.82rem;
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
 }
 
 .footer-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 14px;
+  gap: 2px 6px;
 }
 
 .footer-nav a {
-  color: var(--muted);
+  color: #cbd5e1;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  padding: 4px 6px;
-  border-radius: var(--radius-sm);
+  padding: 4px 9px;
+  border-radius: 999px;
   transition:
     color 0.18s ease,
     background-color 0.18s ease;
 }
 
 .footer-nav a:hover {
-  color: var(--brand);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .footer-nav a:focus-visible {
   outline: none;
-  box-shadow: var(--ring);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.6);
+}
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
 }
 
 /* ---------- Responsive ---------- */
@@ -717,8 +719,19 @@ button.ghost:hover {
 
   .footer-inner {
     flex-direction: column;
-    gap: 16px;
-    padding: 24px 16px;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .footer-meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-nav {
+    justify-content: center;
   }
 }
 

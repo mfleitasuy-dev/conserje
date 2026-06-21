@@ -46,24 +46,21 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className="container">{children}</main>
           <footer className="footer">
             <div className="footer-inner">
-              <div className="footer-brand">
-                <div className="brand">
-                  <BuildingIcon size={20} />
-                  Conserje
-                </div>
-                <p className="footer-tagline">
-                  Gestión de accesos y cocheras para edificios
-                </p>
-                <p className="footer-copy">© 2026 Conserje</p>
+              <div className="brand">
+                <BuildingIcon size={18} />
+                Conserje
               </div>
-              <nav className="footer-nav" aria-label="Pie de página">
-                <Link href="/">Dashboard</Link>
-                <Link href="/porteria">Portería</Link>
-                <Link href="/parking">Cocheras</Link>
-                <Link href="/noticias">Noticias</Link>
-                <Link href="/alertas">Alertas</Link>
-                <Link href="/denuncias">Denuncias</Link>
-              </nav>
+              <div className="footer-meta">
+                <nav className="footer-nav" aria-label="Pie de página">
+                  <Link href="/">Dashboard</Link>
+                  <Link href="/porteria">Portería</Link>
+                  <Link href="/parking">Cocheras</Link>
+                  <Link href="/noticias">Noticias</Link>
+                  <Link href="/alertas">Alertas</Link>
+                  <Link href="/denuncias">Denuncias</Link>
+                </nav>
+                <span className="footer-copy">© 2026 Conserje</span>
+              </div>
             </div>
           </footer>
         </ToastProvider>
