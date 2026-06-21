@@ -17,10 +17,7 @@ const client = new Client({ name: "smoke", version: "1.0.0" });
 await client.connect(transport);
 
 const tools = await client.listTools();
-console.log(
-  "TOOLS:",
-  tools.tools.map((t) => t.name).join(", "),
-);
+console.log("TOOLS:", tools.tools.map((t) => t.name).join(", "));
 
 const visita = await client.callTool({
   name: "registrar_visita",

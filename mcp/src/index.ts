@@ -8,7 +8,11 @@ import { z } from "zod";
 
 import { getDb } from "../../lib/db";
 import { registerVisit, listVisitsToday, registerExit } from "../../lib/visits";
-import { listSpots, parkingSummary, assignResidentSpot } from "../../lib/parking";
+import {
+  listSpots,
+  parkingSummary,
+  assignResidentSpot,
+} from "../../lib/parking";
 import { DomainError } from "../../lib/errors";
 
 // Fallback para correr la demo sin tener que exportar la variable a mano.
@@ -19,7 +23,9 @@ const server = new McpServer({ name: "consorcio-mcp", version: "1.0.0" });
 
 /** Envuelve un handler: serializa el resultado y mapea DomainError a isError. */
 function ok(data: unknown) {
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+  return {
+    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
+  };
 }
 function fail(message: string) {
   return { isError: true, content: [{ type: "text" as const, text: message }] };

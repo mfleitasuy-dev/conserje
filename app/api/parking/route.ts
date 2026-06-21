@@ -18,7 +18,11 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   try {
     const body = assignSpotInput.parse(await req.json());
-    const spot = await assignResidentSpot(getDb(), body.spot_label, body.unidad);
+    const spot = await assignResidentSpot(
+      getDb(),
+      body.spot_label,
+      body.unidad,
+    );
     return NextResponse.json(spot);
   } catch (e) {
     return errorResponse(e);

@@ -58,10 +58,7 @@ export async function getVisit(db: DB, id: number): Promise<Visit | null> {
   return (rows[0] as Visit) ?? null;
 }
 
-export async function registerVisit(
-  db: DB,
-  input: VisitInput,
-): Promise<Visit> {
+export async function registerVisit(db: DB, input: VisitInput): Promise<Visit> {
   const data = visitInput.parse(input);
   const unitId = await unitIdByLabel(db, data.unidad);
   const spotId = await resolveVisitorSpot(db, data.cochera_visita);
