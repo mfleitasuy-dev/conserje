@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "../ui/Toast";
 
 type Option = { label: string };
 
@@ -13,29 +14,39 @@ export default function AssignForm({
   units: Option[];
 }) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const { notify } = useToast();
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const form = e.currentTarget;
     const data = new FormData(form);
+    const spotLabel = String(data.get("spot_label") ?? "");
+    const unidad = String(data.get("unidad") ?? "");
     const res = await fetch("/api/parking", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        spot_label: String(data.get("spot_label") ?? ""),
-        unidad: String(data.get("unidad") ?? ""),
+        spot_label: spotLabel,
+        unidad,
       }),
     });
     setBusy(false);
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
-      setError(j.error ?? "No se pudo asignar la cochera.");
+      notify({
+        type: "error",
+        title: "No se pudo asignar la cochera",
+        description: j.error,
+      });
       return;
     }
+    notify({
+      type: "ok",
+      title: "Cochera asignada",
+      description: `${spotLabel} · Unidad ${unidad}`,
+    });
     router.refresh();
   }
 
@@ -73,11 +84,6 @@ export default function AssignForm({
           {busy ? "Asignando…" : "Asignar a residente"}
         </button>
       </div>
-      {error && (
-        <p className="error" style={{ gridColumn: "1 / -1" }}>
-          {error}
-        </p>
-      )}
     </form>
   );
 }

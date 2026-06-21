@@ -59,6 +59,8 @@ body {
     ),
     var(--bg);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------- Topbar ---------- */
@@ -119,9 +121,11 @@ body {
 
 /* ---------- Layout ---------- */
 .container {
+  width: 100%;
   max-width: 1040px;
   margin: 0 auto;
   padding: 32px 24px 72px;
+  flex: 1 0 auto;
 }
 
 h1 {
@@ -524,6 +528,179 @@ button.ghost:hover {
   color: var(--muted);
 }
 
+/* ---------- Toasts (feedback de acciones) ---------- */
+.toast-viewport {
+  position: fixed;
+  top: 76px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 12px 12px 12px 14px;
+  animation: toast-in 0.22s ease;
+}
+
+.toast.ok {
+  border-left-color: var(--ok);
+  background: var(--ok-bg);
+  border-color: var(--ok-border);
+}
+
+.toast.error {
+  border-left-color: var(--busy);
+  background: var(--busy-bg);
+  border-color: var(--busy-border);
+}
+
+.toast-icon {
+  display: flex;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.toast.ok .toast-icon {
+  color: var(--ok);
+}
+
+.toast.error .toast-icon {
+  color: var(--busy);
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast .title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--heading);
+}
+
+.toast .desc {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.toast-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 2px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.toast-close:hover {
+  color: var(--heading);
+}
+
+.toast-close:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  flex-shrink: 0;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.footer-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer-brand .brand {
+  color: var(--heading);
+}
+
+.footer-brand .brand svg {
+  color: var(--brand);
+}
+
+.footer-tagline {
+  margin: 8px 0 2px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 42ch;
+}
+
+.footer-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.footer-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.footer-nav a:hover {
+  color: var(--brand);
+}
+
+.footer-nav a:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 600px) {
   .container {
@@ -536,6 +713,12 @@ button.ghost:hover {
 
   .topbar nav {
     width: 100%;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 16px;
   }
 }
 

@@ -2,17 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "../ui/Toast";
 
 type Option = { label: string };
 
 export default function ComplaintForm({ units }: { units: Option[] }) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const { notify } = useToast();
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -30,9 +30,14 @@ export default function ComplaintForm({ units }: { units: Option[] }) {
     setBusy(false);
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
-      setError(j.error ?? "No se pudo registrar la denuncia.");
+      notify({
+        type: "error",
+        title: "No se pudo registrar la denuncia",
+        description: j.error,
+      });
       return;
     }
+    notify({ type: "ok", title: "Denuncia registrada" });
     form.reset();
     router.refresh();
   }
@@ -71,11 +76,6 @@ export default function ComplaintForm({ units }: { units: Option[] }) {
           {busy ? "Registrando…" : "Registrar denuncia"}
         </button>
       </div>
-      {error && (
-        <p className="error" style={{ gridColumn: "1 / -1" }}>
-          {error}
-        </p>
-      )}
     </form>
   );
 }

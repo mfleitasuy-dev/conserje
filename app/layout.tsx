@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Fira_Sans, Fira_Code } from "next/font/google";
 import { BuildingIcon } from "./icons";
+import { ToastProvider } from "./ui/Toast";
 
 const firaSans = Fira_Sans({
   subsets: ["latin"],
@@ -27,21 +28,45 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={`${firaSans.variable} ${firaCode.variable}`}>
       <body>
-        <header className="topbar">
-          <div className="brand">
-            <BuildingIcon size={22} />
-            Conserje
-          </div>
-          <nav>
-            <Link href="/">Dashboard</Link>
-            <Link href="/porteria">Portería</Link>
-            <Link href="/parking">Cocheras</Link>
-            <Link href="/noticias">Noticias</Link>
-            <Link href="/alertas">Alertas</Link>
-            <Link href="/denuncias">Denuncias</Link>
-          </nav>
-        </header>
-        <main className="container">{children}</main>
+        <ToastProvider>
+          <header className="topbar">
+            <div className="brand">
+              <BuildingIcon size={22} />
+              Conserje
+            </div>
+            <nav>
+              <Link href="/">Dashboard</Link>
+              <Link href="/porteria">Portería</Link>
+              <Link href="/parking">Cocheras</Link>
+              <Link href="/noticias">Noticias</Link>
+              <Link href="/alertas">Alertas</Link>
+              <Link href="/denuncias">Denuncias</Link>
+            </nav>
+          </header>
+          <main className="container">{children}</main>
+          <footer className="footer">
+            <div className="footer-inner">
+              <div className="footer-brand">
+                <div className="brand">
+                  <BuildingIcon size={20} />
+                  Conserje
+                </div>
+                <p className="footer-tagline">
+                  Gestión de accesos y cocheras para edificios
+                </p>
+                <p className="footer-copy">© 2026 Conserje</p>
+              </div>
+              <nav className="footer-nav" aria-label="Pie de página">
+                <Link href="/">Dashboard</Link>
+                <Link href="/porteria">Portería</Link>
+                <Link href="/parking">Cocheras</Link>
+                <Link href="/noticias">Noticias</Link>
+                <Link href="/alertas">Alertas</Link>
+                <Link href="/denuncias">Denuncias</Link>
+              </nav>
+            </div>
+          </footer>
+        </ToastProvider>
       </body>
     </html>
   );

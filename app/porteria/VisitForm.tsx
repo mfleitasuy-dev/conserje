@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "../ui/Toast";
 
 type Option = { label: string };
 
@@ -13,19 +14,20 @@ export default function VisitForm({
   visitorSpots: Option[];
 }) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const { notify } = useToast();
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const form = e.currentTarget;
     const data = new FormData(form);
+    const visitorName = String(data.get("visitor_name") ?? "");
+    const unidad = String(data.get("unidad") ?? "");
     const body: Record<string, string> = {
-      visitor_name: String(data.get("visitor_name") ?? ""),
+      visitor_name: visitorName,
       visitor_doc: String(data.get("visitor_doc") ?? ""),
-      unidad: String(data.get("unidad") ?? ""),
+      unidad,
     };
     const plate = String(data.get("plate") ?? "").trim();
     const cochera = String(data.get("cochera_visita") ?? "").trim();
@@ -40,9 +42,18 @@ export default function VisitForm({
     setBusy(false);
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
-      setError(j.error ?? "No se pudo registrar la visita.");
+      notify({
+        type: "error",
+        title: "No se pudo registrar la visita",
+        description: j.error,
+      });
       return;
     }
+    notify({
+      type: "ok",
+      title: "Visita registrada",
+      description: `${visitorName} · Unidad ${unidad}`,
+    });
     form.reset();
     router.refresh();
   }
@@ -91,11 +102,6 @@ export default function VisitForm({
           {busy ? "Registrando…" : "Registrar ingreso"}
         </button>
       </div>
-      {error && (
-        <p className="error" style={{ gridColumn: "1 / -1" }}>
-          {error}
-        </p>
-      )}
     </form>
   );
 }

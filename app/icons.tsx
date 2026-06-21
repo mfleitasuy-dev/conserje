@@ -138,3 +138,12 @@ export function FlagIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function XIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      {props.title && <title>{props.title}</title>}
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
