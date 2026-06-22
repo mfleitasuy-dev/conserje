@@ -14,3 +14,6 @@ __pycache__/
 
 # Skill solo local (no se versiona)
 .claude/skills/ui-ux-pro-max/
+
+# Config local de Claude Code (personal)
+.claude/settings.local.json
