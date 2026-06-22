@@ -11,3 +11,6 @@ mcp/dist/
 next-env.d.ts
 __pycache__/
 *.pyc
+
+# Skill solo local (no se versiona)
+.claude/skills/ui-ux-pro-max/
