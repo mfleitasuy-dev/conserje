@@ -9,3 +9,5 @@ mcp/dist/
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+__pycache__/
+*.pyc
