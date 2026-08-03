@@ -1,8 +1,8 @@
 # 🏢 Conserje
 
-Panel de gestión de **accesos (portería)** y **cocheras** para edificios/torres. Digitaliza lo que
-hoy se maneja con un cuaderno en portería y un grupo de WhatsApp: registro de visitas y ocupación de
-cocheras, en una sola pantalla de uso interno.
+Panel de gestión de **accesos (portería)**, **cocheras**, **noticias**, **alertas** y
+**denuncias** para edificios/torres. Digitaliza lo que hoy se maneja con un cuaderno en
+portería y un grupo de WhatsApp, en una sola pantalla de uso interno.
 
 Proyecto **capstone de BIOS 2026**: el producto es una web "normal" (sin IA adentro); lo que demuestra
 es **desarrollo asistido por IA bien hecho** — toda la capa de tooling de IA está versionada en el repo.
@@ -16,10 +16,22 @@ es **desarrollo asistido por IA bien hecho** — toda la capa de tooling de IA e
 | # | Entregable | Dónde |
 |---|------------|-------|
 | 1 | Repo + `CLAUDE.md` | [`CLAUDE.md`](./CLAUDE.md) — convenciones + 2 decisiones explicadas |
-| 2 | 5 plantillas de prompt | [`prompts/`](./prompts) — cada una con nombre, cuándo, variables, ejemplo y XML |
+| 2 | Plantillas de prompt (9) | [`prompts/`](./prompts) — cada una con nombre, cuándo, variables, ejemplo y XML |
 | 3 | Skill cargable | [`.claude/skills/nuevo-modulo`](./.claude/skills/nuevo-modulo) — scaffolda un módulo CRUD |
 | 4 | MCP propio **+** subagente | [`mcp/`](./mcp) (`consorcio-mcp`) y [`.claude/agents/test-runner.md`](./.claude/agents/test-runner.md) |
 | 5 | Video-demo | link arriba ☝️ |
+
+## ✅ Entregable 2
+
+| Artefacto | Dónde |
+|-----------|-------|
+| Prototipo funcional | esta app (ver [Cómo correr](#-cómo-correr)) |
+| Diagramas C4 nivel 1 y 2 (Mermaid) | [`docs/architecture/`](./docs/architecture) |
+| ADRs (template Nygard) | [`docs/adr/`](./docs/adr) |
+| `CLAUDE.md` actualizado | [`CLAUDE.md`](./CLAUDE.md) |
+| Subagentes (2) | [`.claude/agents/`](./.claude/agents) — `test-runner` y `ui-reviewer` |
+| Specs SDD ejecutadas (4) + planes + evidencia | [`specs/`](./specs) — visitas-filtro, alertas-filtro, resolver-denuncias, dashboard-resumen |
+| Browser agent (Playwright + RCCF + costo) | [`docs/browser-agent/`](./docs/browser-agent) |
 
 ## 🧱 Stack
 
@@ -47,9 +59,15 @@ npm test
 
 ### Pantallas
 
-- **Dashboard** (`/`) — visitas en el edificio y ocupación de cocheras.
-- **Portería** (`/porteria`) — registrar ingreso, listar el día, marcar salida.
-- **Cocheras** (`/parking`) — estado de cocheras y asignación a residentes.
+- **Dashboard** (`/`) — visitas, ocupación de cocheras, alertas activas, denuncias abiertas
+  y última noticia.
+- **Portería** (`/porteria`) — registrar ingreso, listar el día, marcar salida. La API
+  permite filtrar el historial por fecha y unidad (`GET /api/visits?fecha=…&unidad=…`).
+- **Cocheras** (`/parking`) — estado de cocheras, asignación a residentes y liberación.
+- **Noticias** (`/noticias`) — publicar y listar avisos del consorcio.
+- **Alertas** (`/alertas`) — crear, listar y resolver alertas; la API filtra por estado y
+  severidad (`GET /api/alerts?estado=…&severidad=…`).
+- **Denuncias** (`/denuncias`) — registrar reclamos de residentes y marcarlos resueltos.
 
 ## 🤖 Capa de IA-dev
 
@@ -64,9 +82,17 @@ npm test
   npx tsx mcp/smoke.ts   # prueba: lista las tools y ejecuta algunas
   ```
 
-- **Subagente `test-runner`** — corre la suite y reporta fallos en aislamiento.
+- **Subagentes** — [`test-runner`](./.claude/agents/test-runner.md) corre la suite y reporta
+  fallos en aislamiento; [`ui-reviewer`](./.claude/agents/ui-reviewer.md) navega la UI con el
+  **MCP de Playwright** (también en `.mcp.json`) y reporta pantallas rotas.
+- **Specs SDD** — [`specs/`](./specs): cada feature con su ciclo spec v1 → gaps → spec v2 →
+  plan → **evidencia de ejecución** (tests y commits).
+- **Arquitectura** — [`docs/architecture/`](./docs/architecture) (C4 niveles 1 y 2 en
+  Mermaid) y [`docs/adr/`](./docs/adr) (decisiones con template Nygard).
+- **Browser agent** — [`docs/browser-agent/`](./docs/browser-agent): flujo de portería
+  automatizado con Playwright, con prompt RCCF, corrida con capturas y doc de costo.
 
 ## 🗺️ Roadmap (fuera del MVP)
 
-Noticias/alertas a residentes · denuncias/reclamos con seguimiento · autenticación y roles
-(Admin/Portero/Residente).
+Autenticación y roles (Admin/Portero/Residente) · filtros de UI para visitas y alertas
+(las APIs ya los soportan) · seguimiento con comentarios en denuncias.
