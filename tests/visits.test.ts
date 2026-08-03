@@ -182,10 +182,12 @@ describe("listVisitsToday", () => {
       visitor_doc: "1",
       unidad: "4B",
     });
-    // Atrasamos la entrada de Ana 1 hora para que el orden por entered_at sea
+    // Atrasamos la entrada de Ana 1 segundo para que el orden por entered_at sea
     // determinista (ambas se insertan con now() y podrían empatar al milisegundo).
+    // Debe ser un desplazamiento chico: uno grande cruza medianoche si la suite
+    // corre en la primera hora del día y la visita deja de contar como "de hoy".
     await db.query(
-      "UPDATE visits SET entered_at = now() - interval '1 hour' WHERE id = $1",
+      "UPDATE visits SET entered_at = now() - interval '1 second' WHERE id = $1",
       [ana.id],
     );
     await registerVisit(db, {
