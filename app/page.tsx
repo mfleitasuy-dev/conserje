@@ -2,6 +2,8 @@ import { getDb } from "@/lib/db";
 import { listVisitsToday } from "@/lib/visits";
 import { parkingSummary } from "@/lib/parking";
 import { listActiveAlerts } from "@/lib/alerts";
+import { complaintsSummary } from "@/lib/complaints";
+import { latestNews } from "@/lib/news";
 import { hora, fechaHora } from "@/lib/format";
 import {
   UsersIcon,
@@ -10,17 +12,22 @@ import {
   CheckCircleIcon,
   InboxIcon,
   AlertTriangleIcon,
+  FlagIcon,
+  NewspaperIcon,
 } from "./icons";
 
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
   const db = getDb();
-  const [visits, parking, activeAlerts] = await Promise.all([
-    listVisitsToday(db),
-    parkingSummary(db),
-    listActiveAlerts(db),
-  ]);
+  const [visits, parking, activeAlerts, complaints, ultimaNoticia] =
+    await Promise.all([
+      listVisitsToday(db),
+      parkingSummary(db),
+      listActiveAlerts(db),
+      complaintsSummary(db),
+      latestNews(db),
+    ]);
   const activas = visits.filter((v) => !v.exited_at);
 
   return (
@@ -63,6 +70,24 @@ export default async function Dashboard() {
           </div>
           <div className="num">{activeAlerts.length}</div>
           <div className="lbl">Alertas activas</div>
+        </div>
+        <div className="card">
+          <div className="card-head">
+            <FlagIcon size={18} />
+          </div>
+          <div className="num">{complaints.abiertas}</div>
+          <div className="lbl">Denuncias abiertas</div>
+        </div>
+        <div className="card">
+          <div className="card-head">
+            <NewspaperIcon size={18} />
+          </div>
+          <div className="num txt">{ultimaNoticia?.title ?? "—"}</div>
+          <div className="lbl">
+            {ultimaNoticia
+              ? `Última noticia · ${fechaHora(ultimaNoticia.created_at)}`
+              : "Última noticia"}
+          </div>
         </div>
       </div>
 

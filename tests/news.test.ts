@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { makeTestDb } from "./helpers/db";
-import { createNews, listNews, getNews } from "@/lib/news";
+import { createNews, listNews, latestNews, getNews } from "@/lib/news";
 import type { DB } from "@/lib/db";
 
 let db: DB;
@@ -47,5 +47,21 @@ describe("listNews", () => {
 describe("getNews", () => {
   it("devuelve null si la noticia no existe", async () => {
     expect(await getNews(db, 9999)).toBeNull();
+  });
+});
+
+describe("latestNews", () => {
+  it("devuelve la publicada más recientemente (E2)", async () => {
+    await createNews(db, { title: "Anterior", body: "x" });
+    const nueva = await createNews(db, { title: "Corte de agua", body: "y" });
+    const latest = await latestNews(db);
+    expect(latest).not.toBeNull();
+    expect(latest!.id).toBe(nueva.id);
+    expect(latest!.title).toBe("Corte de agua");
+  });
+
+  it("devuelve null si no hay noticias (S1)", async () => {
+    await db.query("DELETE FROM news");
+    expect(await latestNews(db)).toBeNull();
   });
 });

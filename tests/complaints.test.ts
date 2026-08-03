@@ -4,6 +4,7 @@ import {
   createComplaint,
   listComplaints,
   resolveComplaint,
+  complaintsSummary,
   getComplaint,
 } from "@/lib/complaints";
 import type { DB } from "@/lib/db";
@@ -124,5 +125,24 @@ describe("resolveComplaint", () => {
 
   it("falla si la denuncia no existe (UN1)", async () => {
     await expect(resolveComplaint(db, 9999)).rejects.toThrow(/no existe/i);
+  });
+});
+
+describe("complaintsSummary", () => {
+  it("cuenta total y abiertas; resolver baja solo abiertas (E1, UN1)", async () => {
+    const antes = await complaintsSummary(db);
+    const c = await createComplaint(db, {
+      unidad: "2A",
+      category: "ruidos",
+      description: "x",
+    });
+    const conNueva = await complaintsSummary(db);
+    expect(conNueva.total).toBe(antes.total + 1);
+    expect(conNueva.abiertas).toBe(antes.abiertas + 1);
+
+    await resolveComplaint(db, c.id);
+    const trasResolver = await complaintsSummary(db);
+    expect(trasResolver.total).toBe(antes.total + 1);
+    expect(trasResolver.abiertas).toBe(antes.abiertas);
   });
 });

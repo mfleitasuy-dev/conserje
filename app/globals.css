@@ -192,6 +192,16 @@ h1 {
   color: var(--heading);
 }
 
+/* Tarjetas cuyo valor es un texto (ej. título de la última noticia). */
+.card .num.txt {
+  font-family: inherit;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card .lbl {
   color: var(--muted);
   font-size: 0.82rem;

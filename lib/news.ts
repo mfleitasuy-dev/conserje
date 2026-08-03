@@ -30,3 +30,9 @@ export async function listNews(db: DB): Promise<News[]> {
   const { rows } = await db.query(`${NEWS_SELECT} ORDER BY created_at DESC`);
   return rows as News[];
 }
+
+/** La noticia publicada más reciente, o null si no hay ninguna. */
+export async function latestNews(db: DB): Promise<News | null> {
+  const list = await listNews(db);
+  return list[0] ?? null;
+}

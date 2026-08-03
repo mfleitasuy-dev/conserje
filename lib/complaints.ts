@@ -55,6 +55,15 @@ export async function listComplaints(db: DB): Promise<Complaint[]> {
   return rows as Complaint[];
 }
 
+/** Resumen para el dashboard: total histórico y abiertas (patrón parkingSummary). */
+export async function complaintsSummary(
+  db: DB,
+): Promise<{ total: number; abiertas: number }> {
+  const list = await listComplaints(db);
+  const abiertas = list.filter((c) => !c.resolved_at).length;
+  return { total: list.length, abiertas };
+}
+
 export async function resolveComplaint(db: DB, id: number): Promise<Complaint> {
   const { rows } = await db.query(
     "UPDATE complaints SET resolved_at = now() WHERE id = $1 AND resolved_at IS NULL RETURNING id",
