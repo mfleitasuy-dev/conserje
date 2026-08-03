@@ -27,7 +27,7 @@ es **desarrollo asistido por IA bien hecho** — toda la capa de tooling de IA e
 |-----------|-------|
 | Prototipo funcional | esta app (ver [Cómo correr](#-cómo-correr)) |
 | Diagramas C4 nivel 1 y 2 (Mermaid) | [`docs/architecture/`](./docs/architecture) |
-| ADRs (template Nygard) | [`docs/adr/`](./docs/adr) |
+| ADRs (template Nygard) | [`docs/architecture/adr/`](./docs/architecture/adr) |
 | `CLAUDE.md` actualizado | [`CLAUDE.md`](./CLAUDE.md) |
 | Subagentes (2) | [`.claude/agents/`](./.claude/agents) — `test-runner` y `ui-reviewer` |
 | Specs SDD ejecutadas (4) + planes + evidencia | [`specs/`](./specs) — visitas-filtro, alertas-filtro, resolver-denuncias, dashboard-resumen |
@@ -88,7 +88,7 @@ npm test
 - **Specs SDD** — [`specs/`](./specs): cada feature con su ciclo spec v1 → gaps → spec v2 →
   plan → **evidencia de ejecución** (tests y commits).
 - **Arquitectura** — [`docs/architecture/`](./docs/architecture) (C4 niveles 1 y 2 en
-  Mermaid) y [`docs/adr/`](./docs/adr) (decisiones con template Nygard).
+  Mermaid) y [`docs/architecture/adr/`](./docs/architecture/adr) (decisiones con template Nygard).
 - **Browser agent** — [`docs/browser-agent/`](./docs/browser-agent): flujo de portería
   automatizado con Playwright, con prompt RCCF, corrida con capturas y doc de costo.
 

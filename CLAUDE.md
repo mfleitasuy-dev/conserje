@@ -54,7 +54,7 @@ db/                     # schema.sql, seed.sql
 mcp/                    # MCP server propio (consorcio-mcp)
 prompts/                # plantillas de prompt de desarrollo
 specs/                  # specs SDD por feature (v1 → gaps → v2 → plan → evidencia)
-docs/                   # architecture (C4), adr (decisiones), browser-agent (evidencia E2E)
+docs/                   # architecture (C4 + adr con las decisiones), browser-agent (evidencia E2E)
 .claude/agents/         # subagentes: test-runner, ui-reviewer
 ```
 
@@ -76,12 +76,12 @@ docs/                   # architecture (C4), adr (decisiones), browser-agent (ev
 
 ## Decisiones
 
-Las decisiones de arquitectura están formalizadas como ADRs en [`docs/adr/`](./docs/adr/):
+Las decisiones de arquitectura están formalizadas como ADRs en [`docs/architecture/adr/`](./docs/architecture/adr/):
 
-1. [ADR-001 — Postgres en vez de persistencia en memoria](./docs/adr/adr-001-postgres-en-vez-de-memoria.md):
+1. [ADR-001 — Postgres en vez de persistencia en memoria](./docs/architecture/adr/adr-001-postgres-en-vez-de-memoria.md):
    la web y el MCP operan sobre la misma base (dos clientes, una única fuente de verdad);
    los tests no pagan el costo (usan `pg-mem` contra el mismo `schema.sql`).
-2. [ADR-002 — Sin autenticación en el MVP](./docs/adr/adr-002-sin-autenticacion-en-el-mvp.md):
+2. [ADR-002 — Sin autenticación en el MVP](./docs/architecture/adr/adr-002-sin-autenticacion-en-el-mvp.md):
    la app es un kiosko físico de portería; auth y roles (Admin/Portero/Residente) quedan en
    el roadmap.
 
