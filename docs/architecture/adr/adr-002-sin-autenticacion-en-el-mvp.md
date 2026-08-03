@@ -6,11 +6,11 @@ Aceptada — 2026-08-03.
 
 ## Contexto
 
-El MVP se construyó con un scope de 2 días. La app está pensada como **kiosko físico de
-portería**: una sola pantalla de uso interno, operada por el portero dentro del edificio, no
-expuesta a internet. Implementar login, sesiones y roles habría consumido una parte importante
-del tiempo disponible, en detrimento de las reglas de negocio (accesos y cocheras), que son lo
-que el MVP debe demostrar.
+El MVP tiene un scope acotado y prioriza demostrar las reglas de negocio (accesos y
+cocheras). La app está pensada como **kiosko físico de portería**: una sola pantalla de uso
+interno, operada por el portero dentro del edificio, no expuesta a internet. Implementar
+login, sesiones y roles habría consumido una parte importante del esfuerzo disponible, en
+detrimento de lo que el MVP debe demostrar.
 
 ## Decisión
 
@@ -22,7 +22,7 @@ acceso es físico (quién está frente al kiosko). Autenticación y roles
 
 ### Positivas
 
-- El scope de 2 días se invierte en reglas de negocio (visitas, cocheras, noticias, alertas,
+- El esfuerzo del MVP se invierte en reglas de negocio (visitas, cocheras, noticias, alertas,
   denuncias) en lugar de infraestructura de login.
 - Menos fricción para el portero: el kiosko queda siempre listo, sin sesiones que expiren.
 - Menos superficie de código en el MVP: no hay manejo de contraseñas, sesiones ni permisos.
