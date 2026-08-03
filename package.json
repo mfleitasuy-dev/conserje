@@ -11,7 +11,6 @@
     "test:watch": "vitest",
     "format": "prettier --write app lib tests mcp",
     "db:setup": "psql \"${DATABASE_URL:-postgresql://conserje:conserje@localhost:5432/conserje}\" -f db/schema.sql -f db/seed.sql",
-    "mcp:build": "tsc -p mcp/tsconfig.json",
     "mcp:dev": "tsx mcp/src/index.ts"
   },
   "dependencies": {
