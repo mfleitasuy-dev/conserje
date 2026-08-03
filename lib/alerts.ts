@@ -1,6 +1,6 @@
 import type { DB } from "./db";
 import { DomainError } from "./errors";
-import { alertInput, type AlertInput } from "./schemas";
+import { alertInput, type AlertInput, type AlertFilter } from "./schemas";
 
 export type Severity = "baja" | "media" | "alta";
 
@@ -30,17 +30,29 @@ export async function createAlert(db: DB, input: AlertInput): Promise<Alert> {
   return (await getAlert(db, rows[0].id as number))!;
 }
 
-export async function listAlerts(db: DB): Promise<Alert[]> {
-  const { rows } = await db.query(`${ALERT_SELECT} ORDER BY created_at DESC`);
+export async function listAlerts(
+  db: DB,
+  filter: AlertFilter = { estado: "todas" },
+): Promise<Alert[]> {
+  const clauses: string[] = [];
+  const params: unknown[] = [];
+  if (filter.estado === "activa") clauses.push("resolved_at IS NULL");
+  if (filter.estado === "resuelta") clauses.push("resolved_at IS NOT NULL");
+  if (filter.severidad) {
+    params.push(filter.severidad);
+    clauses.push(`severity = $${params.length}`);
+  }
+  const where = clauses.length > 0 ? ` WHERE ${clauses.join(" AND ")}` : "";
+  const { rows } = await db.query(
+    `${ALERT_SELECT}${where} ORDER BY created_at DESC`,
+    params,
+  );
   return rows as Alert[];
 }
 
 /** Alertas todavía sin resolver, la más reciente primero (para el dashboard). */
 export async function listActiveAlerts(db: DB): Promise<Alert[]> {
-  const { rows } = await db.query(
-    `${ALERT_SELECT} WHERE resolved_at IS NULL ORDER BY created_at DESC`,
-  );
-  return rows as Alert[];
+  return listAlerts(db, { estado: "activa" });
 }
 
 export async function resolveAlert(db: DB, id: number): Promise<Alert> {

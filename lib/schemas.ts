@@ -64,6 +64,23 @@ export const alertInput = z.object({
 // Usamos el tipo de entrada porque `severity` tiene default (es opcional al crear).
 export type AlertInput = z.input<typeof alertInput>;
 
+/** Convierte "" o solo espacios (query param vacío) en ausente antes del enum. */
+const vacioComoAusente = (v: unknown) =>
+  typeof v === "string" && v.trim() === "" ? undefined : v;
+
+/** Filtros del listado de alertas (query params del GET /api/alerts). */
+export const alertFilter = z.object({
+  estado: z.preprocess(
+    vacioComoAusente,
+    z.enum(["activa", "resuelta", "todas"]).default("todas"),
+  ),
+  severidad: z.preprocess(
+    vacioComoAusente,
+    z.enum(["baja", "media", "alta"]).optional(),
+  ),
+});
+export type AlertFilter = z.infer<typeof alertFilter>;
+
 /** Datos para registrar una denuncia de un residente. */
 export const complaintInput = z.object({
   unidad: z.string().trim().min(1, "unidad requerida"),
