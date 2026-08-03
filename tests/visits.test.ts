@@ -2,10 +2,12 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { makeTestDb } from "./helpers/db";
 import {
   registerVisit,
+  listVisits,
   listVisitsToday,
   registerExit,
   getVisit,
 } from "@/lib/visits";
+import { visitFilter } from "@/lib/schemas";
 import { listSpots } from "@/lib/parking";
 import type { DB } from "@/lib/db";
 
@@ -211,5 +213,178 @@ describe("listVisitsToday", () => {
     expect(list).toHaveLength(1);
     expect(list[0].id).toBe(v.id);
     expect(list[0].exited_at).not.toBeNull();
+  });
+});
+
+/** YYYY-MM-DD local de un Date (para armar filtros relativos a "hoy"). */
+function ymd(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/** Mueve entered_at de una visita a un instante exacto. */
+async function setEnteredAt(db: DB, id: number, when: Date) {
+  await db.query("UPDATE visits SET entered_at = $1 WHERE id = $2", [when, id]);
+}
+
+describe("listVisits", () => {
+  it("sin filtros devuelve solo las visitas de hoy (E1)", async () => {
+    const vieja = await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const ayer = new Date();
+    ayer.setDate(ayer.getDate() - 1);
+    await setEnteredAt(db, vieja.id, ayer);
+    await registerVisit(db, {
+      visitor_name: "Beto",
+      visitor_doc: "2",
+      unidad: "1A",
+    });
+    const list = await listVisits(db, {});
+    expect(list).toHaveLength(1);
+    expect(list[0].visitor_name).toBe("Beto");
+  });
+
+  it("filtra por fecha con rango semi-abierto y borde de medianoche (E2, G3)", async () => {
+    const base = new Date();
+    base.setDate(base.getDate() - 3);
+    const dentro = await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const finDelDia = new Date(base);
+    finDelDia.setHours(23, 59, 59, 0);
+    await setEnteredAt(db, dentro.id, finDelDia);
+    const fuera = await registerVisit(db, {
+      visitor_name: "Beto",
+      visitor_doc: "2",
+      unidad: "1A",
+    });
+    const medianocheSiguiente = new Date(base);
+    medianocheSiguiente.setDate(medianocheSiguiente.getDate() + 1);
+    medianocheSiguiente.setHours(0, 0, 0, 0);
+    await setEnteredAt(db, fuera.id, medianocheSiguiente);
+
+    const list = await listVisits(db, { fecha: ymd(base) });
+    expect(list).toHaveLength(1);
+    expect(list[0].id).toBe(dentro.id);
+  });
+
+  it("filtra por unidad (E3)", async () => {
+    await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    await registerVisit(db, {
+      visitor_name: "Beto",
+      visitor_doc: "2",
+      unidad: "1A",
+    });
+    const list = await listVisits(db, { unidad: "1A" });
+    expect(list).toHaveLength(1);
+    expect(list[0].unit_label).toBe("1A");
+  });
+
+  it("combina fecha y unidad con AND (E4)", async () => {
+    const otraFecha = await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const ayer = new Date();
+    ayer.setDate(ayer.getDate() - 1);
+    await setEnteredAt(db, otraFecha.id, ayer);
+    await registerVisit(db, {
+      visitor_name: "Beto",
+      visitor_doc: "2",
+      unidad: "4B",
+    });
+    await registerVisit(db, {
+      visitor_name: "Cata",
+      visitor_doc: "3",
+      unidad: "1A",
+    });
+    const list = await listVisits(db, {
+      fecha: ymd(new Date()),
+      unidad: "4B",
+    });
+    expect(list).toHaveLength(1);
+    expect(list[0].visitor_name).toBe("Beto");
+  });
+
+  it("ordena de la más reciente a la más antigua (U1)", async () => {
+    const primera = await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const haceUnRato = new Date(Date.now() - 60_000);
+    await setEnteredAt(db, primera.id, haceUnRato);
+    await registerVisit(db, {
+      visitor_name: "Beto",
+      visitor_doc: "2",
+      unidad: "1A",
+    });
+    const list = await listVisits(db, {});
+    expect(list.map((v) => v.visitor_name)).toEqual(["Beto", "Ana"]);
+  });
+
+  it("unidad inexistente devuelve lista vacía, no error (UN3, G1)", async () => {
+    await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const list = await listVisits(db, { unidad: "ZZ" });
+    expect(list).toEqual([]);
+  });
+
+  it("fecha futura devuelve lista vacía", async () => {
+    await registerVisit(db, {
+      visitor_name: "Ana",
+      visitor_doc: "1",
+      unidad: "4B",
+    });
+    const futuro = new Date();
+    futuro.setDate(futuro.getDate() + 7);
+    const list = await listVisits(db, { fecha: ymd(futuro) });
+    expect(list).toEqual([]);
+  });
+});
+
+describe("visitFilter", () => {
+  it("acepta fecha válida y unidad con espacios", () => {
+    const f = visitFilter.parse({ fecha: "2026-07-09", unidad: " 3A " });
+    expect(f).toEqual({ fecha: "2026-07-09", unidad: "3A" });
+  });
+
+  it("ignora unidad vacía o solo espacios (S1, G4)", () => {
+    expect(visitFilter.parse({ unidad: "   " }).unidad).toBeUndefined();
+    expect(visitFilter.parse({}).unidad).toBeUndefined();
+  });
+
+  it("rechaza fechas mal formadas (UN1)", () => {
+    for (const fecha of ["ayer", "09/07/2026", "2026-7-9"]) {
+      expect(() => visitFilter.parse({ fecha })).toThrow();
+    }
+  });
+
+  it("rechaza fechas inexistentes del calendario (UN1)", () => {
+    for (const fecha of ["2026-13-40", "2026-02-30", "2026-00-01"]) {
+      expect(() => visitFilter.parse({ fecha })).toThrow();
+    }
+  });
+
+  it("rechaza fecha repetida en la query (UN2, G5)", () => {
+    // El route pasa el array crudo de getAll("fecha") cuando viene repetida.
+    expect(() =>
+      visitFilter.parse({ fecha: ["2026-07-01", "2026-07-02"] }),
+    ).toThrow();
   });
 });

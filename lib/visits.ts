@@ -1,6 +1,6 @@
 import type { DB } from "./db";
 import { DomainError } from "./errors";
-import { visitInput, type VisitInput } from "./schemas";
+import { visitInput, type VisitInput, type VisitFilter } from "./schemas";
 
 export type Visit = {
   id: number;
@@ -70,14 +70,39 @@ export async function registerVisit(db: DB, input: VisitInput): Promise<Visit> {
   return (await getVisit(db, rows[0].id as number))!;
 }
 
-export async function listVisitsToday(db: DB): Promise<Visit[]> {
+/** Bordes del día en hora local del servidor: [inicio, inicio del día siguiente). */
+function dayRange(fecha?: string): { start: Date; end: Date } {
   const start = new Date();
+  if (fecha) {
+    const [y, m, d] = fecha.split("-").map(Number);
+    start.setFullYear(y, m - 1, d);
+  }
   start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start, end };
+}
+
+export async function listVisits(
+  db: DB,
+  filter: VisitFilter = {},
+): Promise<Visit[]> {
+  const { start, end } = dayRange(filter.fecha);
+  const params: unknown[] = [start, end];
+  let where = "WHERE v.entered_at >= $1 AND v.entered_at < $2";
+  if (filter.unidad) {
+    params.push(filter.unidad);
+    where += " AND u.label = $3";
+  }
   const { rows } = await db.query(
-    `${VISIT_SELECT} WHERE v.entered_at >= $1 ORDER BY v.entered_at DESC`,
-    [start],
+    `${VISIT_SELECT} ${where} ORDER BY v.entered_at DESC`,
+    params,
   );
   return rows as Visit[];
+}
+
+export async function listVisitsToday(db: DB): Promise<Visit[]> {
+  return listVisits(db, {});
 }
 
 export async function registerExit(db: DB, id: number): Promise<Visit> {

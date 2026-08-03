@@ -10,6 +10,32 @@ export const visitInput = z.object({
 });
 export type VisitInput = z.infer<typeof visitInput>;
 
+/** true si el string YYYY-MM-DD es una fecha real del calendario. */
+function esFechaReal(value: string): boolean {
+  const [y, m, d] = value.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  return (
+    date.getFullYear() === y &&
+    date.getMonth() === m - 1 &&
+    date.getDate() === d
+  );
+}
+
+/** Filtros del listado de visitas (query params del GET /api/visits). */
+export const visitFilter = z.object({
+  fecha: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "fecha con formato YYYY-MM-DD")
+    .refine(esFechaReal, "fecha inexistente")
+    .optional(),
+  unidad: z
+    .string()
+    .trim()
+    .transform((v) => (v === "" ? undefined : v))
+    .optional(),
+});
+export type VisitFilter = z.infer<typeof visitFilter>;
+
 /** Datos para asignar una cochera de residente a una unidad. */
 export const assignSpotInput = z.object({
   spot_label: z.string().trim().min(1),
