@@ -6,6 +6,10 @@
       "env": {
         "DATABASE_URL": "postgresql://conserje:conserje@localhost:5432/conserje"
       }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
     }
   }
 }
