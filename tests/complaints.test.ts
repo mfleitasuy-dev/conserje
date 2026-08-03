@@ -3,6 +3,7 @@ import { makeTestDb } from "./helpers/db";
 import {
   createComplaint,
   listComplaints,
+  resolveComplaint,
   getComplaint,
 } from "@/lib/complaints";
 import type { DB } from "@/lib/db";
@@ -75,5 +76,53 @@ describe("listComplaints", () => {
 describe("getComplaint", () => {
   it("devuelve null si la denuncia no existe", async () => {
     expect(await getComplaint(db, 9999)).toBeNull();
+  });
+});
+
+describe("resolveComplaint", () => {
+  it("una denuncia recién creada está abierta (U1)", async () => {
+    const c = await createComplaint(db, {
+      unidad: "2A",
+      category: "ruidos",
+      description: "x",
+    });
+    expect(c.resolved_at).toBeNull();
+  });
+
+  it("marca la denuncia como resuelta (E1)", async () => {
+    const c = await createComplaint(db, {
+      unidad: "2A",
+      category: "ruidos",
+      description: "x",
+    });
+    const out = await resolveComplaint(db, c.id);
+    expect(out.resolved_at).not.toBeNull();
+  });
+
+  it("la resuelta sigue en el listado con su fecha (E2, S1)", async () => {
+    const c = await createComplaint(db, {
+      unidad: "2A",
+      category: "ruidos",
+      description: "x",
+    });
+    await resolveComplaint(db, c.id);
+    const list = await listComplaints(db);
+    const encontrada = list.find((x) => x.id === c.id);
+    expect(encontrada).toBeDefined();
+    expect(encontrada!.resolved_at).not.toBeNull();
+  });
+
+  it("falla si la denuncia ya está resuelta (UN2)", async () => {
+    const c = await createComplaint(db, {
+      unidad: "2A",
+      category: "ruidos",
+      description: "x",
+    });
+    await resolveComplaint(db, c.id);
+    await expect(resolveComplaint(db, c.id)).rejects.toThrow(/resuelta/i);
+  });
+
+  it("falla si la denuncia no existe (UN1)", async () => {
+    await expect(resolveComplaint(db, 9999)).rejects.toThrow(/no existe/i);
   });
 });

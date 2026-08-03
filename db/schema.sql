@@ -43,5 +43,9 @@ CREATE TABLE IF NOT EXISTS complaints (
   unit_id     INTEGER NOT NULL REFERENCES units (id),
   category    TEXT NOT NULL,
   description TEXT NOT NULL,
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  resolved_at TIMESTAMPTZ
 );
+
+-- Bases creadas antes de resolver-denuncias: IF NOT EXISTS no agrega columnas.
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ;

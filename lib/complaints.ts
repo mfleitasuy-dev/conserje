@@ -8,10 +8,12 @@ export type Complaint = {
   category: string;
   description: string;
   created_at: string;
+  resolved_at: string | null;
 };
 
 const COMPLAINT_SELECT = `
-  SELECT c.id, u.label AS unit_label, c.category, c.description, c.created_at
+  SELECT c.id, u.label AS unit_label, c.category, c.description, c.created_at,
+         c.resolved_at
   FROM complaints c
   JOIN units u ON u.id = c.unit_id`;
 
@@ -51,4 +53,18 @@ export async function listComplaints(db: DB): Promise<Complaint[]> {
     `${COMPLAINT_SELECT} ORDER BY c.created_at DESC`,
   );
   return rows as Complaint[];
+}
+
+export async function resolveComplaint(db: DB, id: number): Promise<Complaint> {
+  const { rows } = await db.query(
+    "UPDATE complaints SET resolved_at = now() WHERE id = $1 AND resolved_at IS NULL RETURNING id",
+    [id],
+  );
+  if (rows.length === 0) {
+    const existing = await getComplaint(db, id);
+    if (!existing)
+      throw new DomainError(`la denuncia ${id} no existe`, "not_found");
+    throw new DomainError(`la denuncia ${id} ya está resuelta`, "conflict");
+  }
+  return (await getComplaint(db, id))!;
 }

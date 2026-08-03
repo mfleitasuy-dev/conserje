@@ -3,6 +3,7 @@ import { listComplaints } from "@/lib/complaints";
 import { fechaHora } from "@/lib/format";
 import { FlagIcon, InboxIcon } from "../icons";
 import ComplaintForm from "./ComplaintForm";
+import ResolveButton from "./ResolveButton";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,8 @@ export default async function Denuncias() {
                   <th>Categoría</th>
                   <th>Descripción</th>
                   <th>Registrada</th>
+                  <th>Estado</th>
+                  <th />
                 </tr>
               </thead>
               <tbody>
@@ -56,6 +59,16 @@ export default async function Denuncias() {
                     </td>
                     <td>{c.description}</td>
                     <td>{fechaHora(c.created_at)}</td>
+                    <td>
+                      {c.resolved_at ? (
+                        <span className="badge ok">
+                          Resuelta {fechaHora(c.resolved_at)}
+                        </span>
+                      ) : (
+                        <span className="badge busy">Abierta</span>
+                      )}
+                    </td>
+                    <td>{!c.resolved_at && <ResolveButton id={c.id} />}</td>
                   </tr>
                 ))}
               </tbody>
