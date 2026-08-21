@@ -1,9 +1,10 @@
 import "./globals.css";
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { Fira_Sans, Fira_Code } from "next/font/google";
 import { BuildingIcon } from "./icons";
 import { ToastProvider } from "./ui/Toast";
+import Clock from "./ui/Clock";
+import NavLink from "./ui/NavLink";
 
 const firaSans = Fira_Sans({
   subsets: ["latin"],
@@ -14,7 +15,7 @@ const firaSans = Fira_Sans({
 
 const firaCode = Fira_Code({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600"],
   variable: "--font-fira-code",
   display: "swap",
 });
@@ -35,15 +36,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               Conserje
             </div>
             <nav>
-              <Link href="/">Dashboard</Link>
-              <Link href="/porteria">Portería</Link>
-              <Link href="/parking">Cocheras</Link>
-              <Link href="/noticias">Noticias</Link>
-              <Link href="/alertas">Alertas</Link>
-              <Link href="/denuncias">Denuncias</Link>
+              <NavLink href="/">Dashboard</NavLink>
+              <NavLink href="/porteria">Portería</NavLink>
+              <NavLink href="/parking">Cocheras</NavLink>
+              <NavLink href="/noticias">Noticias</NavLink>
+              <NavLink href="/alertas">Alertas</NavLink>
+              <NavLink href="/denuncias">Denuncias</NavLink>
             </nav>
           </header>
-          <main className="container">{children}</main>
+          <main className="container">
+            <div className="page-head">
+              <Clock />
+            </div>
+            {children}
+          </main>
           <footer className="footer">
             <div className="footer-inner">
               <div className="brand">

@@ -71,7 +71,7 @@ export default function ComplaintForm({ units }: { units: Option[] }) {
         <input id="description" name="description" required />
       </div>
       <div>
-        <button type="submit" disabled={busy}>
+        <button className="button" type="submit" disabled={busy}>
           {busy && <span className="spinner" aria-hidden />}
           {busy ? "Registrando…" : "Registrar denuncia"}
         </button>

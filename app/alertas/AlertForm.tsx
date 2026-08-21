@@ -54,7 +54,7 @@ export default function AlertForm() {
         </select>
       </div>
       <div>
-        <button type="submit" disabled={busy}>
+        <button className="button" type="submit" disabled={busy}>
           {busy && <span className="spinner" aria-hidden />}
           {busy ? "Creando…" : "Crear alerta"}
         </button>

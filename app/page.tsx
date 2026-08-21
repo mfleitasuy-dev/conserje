@@ -10,6 +10,7 @@ import {
   GaugeIcon,
   CarIcon,
   CheckCircleIcon,
+  DotIcon,
   InboxIcon,
   AlertTriangleIcon,
   FlagIcon,
@@ -17,6 +18,13 @@ import {
 } from "./icons";
 
 export const dynamic = "force-dynamic";
+
+// Ícono por severidad: el estado no se comunica solo por color (spec §4).
+const severityIcon = {
+  baja: <CheckCircleIcon size={13} />,
+  media: <DotIcon size={13} />,
+  alta: <AlertTriangleIcon size={13} />,
+};
 
 export default async function Dashboard() {
   const db = getDb();
@@ -35,8 +43,8 @@ export default async function Dashboard() {
       <h1>Dashboard</h1>
       <p className="subtitle">Resumen del día en el edificio.</p>
 
-      <div className="cards">
-        <div className="card">
+      <div className="cards bento">
+        <div className="card accent">
           <div className="card-head">
             <UsersIcon size={18} />
           </div>
@@ -117,10 +125,11 @@ export default async function Dashboard() {
                     <td>{a.message}</td>
                     <td>
                       <span className={`badge sev-${a.severity}`}>
+                        {severityIcon[a.severity]}
                         {a.severity}
                       </span>
                     </td>
-                    <td>{fechaHora(a.created_at)}</td>
+                    <td className="mono">{fechaHora(a.created_at)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -156,7 +165,7 @@ export default async function Dashboard() {
                     <td>{v.visitor_name}</td>
                     <td>{v.unit_label}</td>
                     <td>{v.spot_label ?? "—"}</td>
-                    <td>{hora(v.entered_at)}</td>
+                    <td className="mono">{hora(v.entered_at)}</td>
                   </tr>
                 ))}
               </tbody>

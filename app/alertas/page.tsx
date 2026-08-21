@@ -1,14 +1,30 @@
 import { getDb } from "@/lib/db";
-import { listAlerts } from "@/lib/alerts";
+import { listAlerts, listActiveAlerts } from "@/lib/alerts";
 import { fechaHora } from "@/lib/format";
-import { AlertTriangleIcon, CheckCircleIcon, InboxIcon } from "../icons";
+import {
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  DotIcon,
+  InboxIcon,
+} from "../icons";
 import AlertForm from "./AlertForm";
 import ResolveButton from "./ResolveButton";
 
 export const dynamic = "force-dynamic";
 
+// Ícono por severidad: el estado no se comunica solo por color (spec §4).
+const severityIcon = {
+  baja: <CheckCircleIcon size={13} />,
+  media: <DotIcon size={13} />,
+  alta: <AlertTriangleIcon size={13} />,
+};
+
 export default async function Alertas() {
-  const alerts = await listAlerts(getDb());
+  const db = getDb();
+  const [alerts, activeAlerts] = await Promise.all([
+    listAlerts(db),
+    listActiveAlerts(db),
+  ]);
 
   return (
     <>
@@ -16,6 +32,16 @@ export default async function Alertas() {
       <p className="subtitle">
         Avisos de seguridad con severidad y seguimiento de resolución.
       </p>
+
+      <div className="cards">
+        <div className="card accent">
+          <div className="card-head">
+            <AlertTriangleIcon size={18} />
+          </div>
+          <div className="num">{activeAlerts.length}</div>
+          <div className="lbl">Alertas activas</div>
+        </div>
+      </div>
 
       <div className="panel">
         <h2>
@@ -53,10 +79,11 @@ export default async function Alertas() {
                     <td>{a.message}</td>
                     <td>
                       <span className={`badge sev-${a.severity}`}>
+                        {severityIcon[a.severity]}
                         {a.severity}
                       </span>
                     </td>
-                    <td>{fechaHora(a.created_at)}</td>
+                    <td className="mono">{fechaHora(a.created_at)}</td>
                     <td>
                       {a.resolved_at ? (
                         <span className="badge ok">

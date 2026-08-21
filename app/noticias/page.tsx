@@ -47,7 +47,7 @@ export default async function Noticias() {
                   <tr key={n.id}>
                     <td>{n.title}</td>
                     <td>{n.body}</td>
-                    <td>{fechaHora(n.created_at)}</td>
+                    <td className="mono">{fechaHora(n.created_at)}</td>
                   </tr>
                 ))}
               </tbody>

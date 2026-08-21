@@ -32,7 +32,7 @@ export default function FreeButton({ spotLabel }: { spotLabel: string }) {
   }
 
   return (
-    <button className="ghost" onClick={onClick} disabled={busy}>
+    <button className="button ghost" onClick={onClick} disabled={busy}>
       {busy ? <span className="spinner" aria-hidden /> : <XIcon size={14} />}
       {busy ? "Liberando…" : "Liberar"}
     </button>
