@@ -29,7 +29,7 @@ borra datos. Los tests no necesitan Postgres (usan `pg-mem`): `npm test`.
 
 ## 🎥 Video-demo (3 min)
 
-> **▶️ Ver demo:** _[pegar acá el link a YouTube/Vimeo]_
+> Sin video para el Entregable 3: la demo es en vivo en el Demo Day (guion en [`docs/pitch.md`](./docs/pitch.md)).
 
 ## ✅ Entregable 1 — Los 5 entregables
 

@@ -9,7 +9,7 @@ Demo en vivo desde mi máquina compartiendo pantalla; nada se busca en vivo.
 - [ ] Terminal aparte lista con `npx tsx mcp/smoke.ts` escrito (sin ejecutar).
 - [ ] Pestañas del repo abiertas en GitHub, en este orden:
   `CLAUDE.md` · `specs/` · `docs/architecture/` (C4) · `docs/architecture/adr/` · `docs/adr-personal.md`.
-- [ ] Video de respaldo a mano (**regrabar con la UI nueva en tema oscuro**; el de junio muestra la UI vieja).
+- [ ] Sin video de respaldo: si algo falla, mostrar las capturas de `docs/browser-agent/capturas/` y seguir.
 - [ ] Notificaciones del sistema silenciadas.
 
 ## 1. Contexto (30 s)
@@ -52,7 +52,7 @@ Ruta exacta, sin desvíos:
 7. *(Opcional, si hay tiempo)* Terminal: `npx tsx mcp/smoke.ts` — "el MCP registra una visita
    por tool; refresco la web y aparece." Cierra la idea de dos clientes, una fuente de verdad.
 
-**Si algo falla:** no debuguear. Decir "uso el video de respaldo", reproducirlo, y seguir.
+**Si algo falla:** no debuguear. Mostrar las capturas de `docs/browser-agent/capturas/` y seguir con el guion.
 
 ## 5. Cierre (15 s)
 
