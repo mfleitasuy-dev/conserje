@@ -81,6 +81,8 @@ numerales mono, pills), sin tocar dominio, APIs ni schema, y conservando los nom
 | `--panel` | `#ffffff` | `#171A18` | cards, paneles, spots |
 | `--panel-2` | — (nuevo) | `#1D211E` | hover de fila, fondo de inputs |
 | `--line` | `#e2e8f0` | `rgba(255,255,255,.08)` | bordes |
+| `--line-strong` | — (nuevo) | `rgba(255,255,255,.14)` | hover de borde en cards, paneles y spots |
+| `--line-input` | — (nuevo) | `rgba(255,255,255,.34)` | borde de `input`/`select`/`textarea` (≥ 3:1 sobre `--panel`, WCAG 1.4.11; agregado en la ejecución) |
 | `--text` | `#0c4a6e` | `#ECEFEA` | texto |
 | `--heading` | `#0c2a45` | `#F5F7F3` | h1/h2 |
 | `--muted` | `#475569` | `#9AA39B` | labels, subtítulos |
@@ -92,9 +94,9 @@ numerales mono, pills), sin tocar dominio, APIs ni schema, y conservando los nom
 | `--warn` / `--warn-bg` / `--warn-border` | — (nuevo) | `#E8C98A` / `rgba(232,201,138,.12)` / `rgba(232,201,138,.35)` | sev. media |
 | `--busy` / `--busy-bg` / `--busy-border` | `#b91c1c` / `#fee2e2` / `#fecaca` | `#F2A5A0` / `rgba(242,165,160,.12)` / `rgba(242,165,160,.35)` | ocupada, sev. alta |
 | `--radius` / `--radius-sm` | `14px` / `9px` | `14px` / `10px` | cards / inputs, badges |
-| `--radius-pill` | — (nuevo) | `999px` | botones, chips |
+| `--radius-pill` | — (nuevo) | `999px` | botones, chips y badges |
 | `--shadow-sm` / `--shadow-md` | sombras | `none` | se conservan por compatibilidad |
-| `--ring` | azul | `0 0 0 3px rgba(220,229,217,.35)` | focus |
+| `--ring` | azul | `0 0 0 3px rgba(220,229,217,.5)` | focus (alpha `.35` → `.5` en la ejecución: con `.35` el anillo daba 2.8:1 sobre `--bg`, < 3:1 de WCAG 1.4.11; ver `evidencia.md`) |
 
 ### Helpers de formato
 

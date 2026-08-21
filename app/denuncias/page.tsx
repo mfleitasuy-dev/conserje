@@ -1,7 +1,13 @@
 import { getDb } from "@/lib/db";
-import { listComplaints } from "@/lib/complaints";
+import { listComplaints, complaintsSummary } from "@/lib/complaints";
 import { fechaHora } from "@/lib/format";
-import { FlagIcon, InboxIcon } from "../icons";
+import {
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  DotIcon,
+  FlagIcon,
+  InboxIcon,
+} from "../icons";
 import ComplaintForm from "./ComplaintForm";
 import ResolveButton from "./ResolveButton";
 
@@ -9,15 +15,26 @@ export const dynamic = "force-dynamic";
 
 export default async function Denuncias() {
   const db = getDb();
-  const [complaints, units] = await Promise.all([
+  const [complaints, units, summary] = await Promise.all([
     listComplaints(db),
     db.query("SELECT label FROM units ORDER BY label"),
+    complaintsSummary(db),
   ]);
 
   return (
     <>
       <h1>Denuncias</h1>
       <p className="subtitle">Reclamos reportados por los residentes.</p>
+
+      <div className="cards">
+        <div className="card accent">
+          <div className="card-head">
+            <FlagIcon size={18} />
+          </div>
+          <div className="num">{summary.abiertas}</div>
+          <div className="lbl">Denuncias abiertas</div>
+        </div>
+      </div>
 
       <div className="panel">
         <h2>
@@ -55,17 +72,24 @@ export default async function Denuncias() {
                   <tr key={c.id}>
                     <td>{c.unit_label}</td>
                     <td>
-                      <span className="badge neutral">{c.category}</span>
+                      <span className="badge neutral">
+                        <DotIcon size={13} />
+                        {c.category}
+                      </span>
                     </td>
                     <td>{c.description}</td>
-                    <td>{fechaHora(c.created_at)}</td>
+                    <td className="mono">{fechaHora(c.created_at)}</td>
                     <td>
                       {c.resolved_at ? (
                         <span className="badge ok">
+                          <CheckCircleIcon size={13} />
                           Resuelta {fechaHora(c.resolved_at)}
                         </span>
                       ) : (
-                        <span className="badge busy">Abierta</span>
+                        <span className="badge busy">
+                          <AlertTriangleIcon size={13} />
+                          Abierta
+                        </span>
                       )}
                     </td>
                     <td>{!c.resolved_at && <ResolveButton id={c.id} />}</td>

@@ -23,3 +23,6 @@ __pycache__/
 skills-lock.json
 .claude/skills/*
 !.claude/skills/nuevo-modulo/
+
+# Artefactos del MCP de Playwright (capturas/snapshots del ui-reviewer)
+.playwright-mcp/

@@ -28,7 +28,7 @@ export default function ExitButton({ id }: { id: number }) {
   }
 
   return (
-    <button className="ghost" onClick={onClick} disabled={busy}>
+    <button className="button ghost" onClick={onClick} disabled={busy}>
       {busy ? (
         <span className="spinner" aria-hidden />
       ) : (

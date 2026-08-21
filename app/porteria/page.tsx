@@ -68,7 +68,7 @@ export default async function Porteria() {
                     <td>{v.unit_label}</td>
                     <td>{v.plate ?? "—"}</td>
                     <td>{v.spot_label ?? "—"}</td>
-                    <td>{hora(v.entered_at)}</td>
+                    <td className="mono">{hora(v.entered_at)}</td>
                     <td>
                       {v.exited_at ? (
                         <span className="badge ok">

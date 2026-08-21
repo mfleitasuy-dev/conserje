@@ -1,3 +1,5 @@
+> **Sistema vigente:** ver `specs/redisenio-visual/spec.v2.md` (tema oscuro); esta plantilla describe el rediseño anterior (tema claro).
+
 # Plantilla: redisenio-ui
 
 **Cuándo usarlo:** cuando querés mejorar la capa visual de Conserje (paleta, tipografía,

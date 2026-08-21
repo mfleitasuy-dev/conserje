@@ -1,6 +1,6 @@
 import { getDb } from "@/lib/db";
-import { listSpots } from "@/lib/parking";
-import { CarIcon, CheckCircleIcon, DotIcon } from "../icons";
+import { listSpots, parkingSummary } from "@/lib/parking";
+import { CarIcon, CheckCircleIcon } from "../icons";
 import AssignForm from "./AssignForm";
 import FreeButton from "./FreeButton";
 
@@ -8,15 +8,26 @@ export const dynamic = "force-dynamic";
 
 export default async function Parking() {
   const db = getDb();
-  const [spots, units] = await Promise.all([
+  const [spots, units, parking] = await Promise.all([
     listSpots(db),
     db.query("SELECT label FROM units ORDER BY label"),
+    parkingSummary(db),
   ]);
 
   return (
     <>
       <h1>Cocheras</h1>
       <p className="subtitle">Estado y asignación de cocheras del edificio.</p>
+
+      <div className="cards">
+        <div className="card accent">
+          <div className="card-head">
+            <CheckCircleIcon size={18} />
+          </div>
+          <div className="num">{parking.libres}</div>
+          <div className="lbl">Cocheras libres</div>
+        </div>
+      </div>
 
       <div className="panel">
         <h2>
@@ -48,7 +59,7 @@ export default async function Parking() {
               </div>
               {s.occupied ? (
                 <span className="badge busy">
-                  <DotIcon size={13} />
+                  <CarIcon size={13} />
                   Ocupada
                 </span>
               ) : (

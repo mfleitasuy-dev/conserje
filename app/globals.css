@@ -1,40 +1,52 @@
 :root {
-  /* Marca: azul seguridad */
-  --brand: #0369a1;
-  --brand-dark: #075985;
-  --accent: #0ea5e9;
+  /* Tema oscuro único (spec.v2 §3). Superficies */
+  --bg: #121412;
+  --panel: #171a18;
+  --panel-2: #1d211e;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  /* borde de input/select/textarea: ≥ 3:1 sobre --panel (WCAG 1.4.11) */
+  --line-input: rgba(255, 255, 255, 0.34);
 
-  /* Semántica de estado (no cambia: verde = libre/ok, rojo = ocupado/busy) */
-  --ok: #15803d;
-  --ok-bg: #dcfce7;
-  --ok-border: #bbf7d0;
-  --busy: #b91c1c;
-  --busy-bg: #fee2e2;
-  --busy-border: #fecaca;
+  /* Texto */
+  --text: #ecefea;
+  --heading: #f5f7f3;
+  --muted: #9aa39b;
 
-  /* Superficies y texto */
-  --bg: #eff6ff;
-  --panel: #ffffff;
-  --topbar: #0c2a45;
-  --text: #0c4a6e;
-  --heading: #0c2a45;
-  --muted: #475569;
-  --line: #e2e8f0;
+  /* Acento salvia (único). --brand/--brand-dark quedan como alias por compatibilidad */
+  --accent: #dce5d9;
+  --on-accent: #121412;
+  --brand: var(--accent);
+  --brand-dark: var(--accent);
+  --topbar: var(--bg);
 
-  /* Profundidad y ritmo */
+  /* Semántica de estado (no cambia: ok = libre, warn = media, busy = ocupado/alta) */
+  --ok: #9fd6a8;
+  --ok-bg: rgba(159, 214, 168, 0.12);
+  --ok-border: rgba(159, 214, 168, 0.35);
+  --warn: #e8c98a;
+  --warn-bg: rgba(232, 201, 138, 0.12);
+  --warn-border: rgba(232, 201, 138, 0.35);
+  --busy: #f2a5a0;
+  --busy-bg: rgba(242, 165, 160, 0.12);
+  --busy-border: rgba(242, 165, 160, 0.35);
+
+  /* Ritmo. Sin sombras: los tokens se conservan por compatibilidad */
   --radius: 14px;
-  --radius-sm: 9px;
-  --shadow-sm:
-    0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 1px rgba(15, 23, 42, 0.04);
-  --shadow-md:
-    0 6px 16px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.05);
-  --ring: 0 0 0 3px rgba(14, 165, 233, 0.35);
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+  --shadow-sm: none;
+  --shadow-md: none;
+  /* Opacidad .5 (no .35): el anillo solo debe dar ≥ 3:1 sobre --bg/--panel-2 (WCAG 1.4.11) */
+  --ring: 0 0 0 3px rgba(220, 229, 217, 0.5);
 
   /* Tipografía (las variables --font-* las inyecta next/font en <html>) */
   --font-sans:
     var(--font-fira-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, sans-serif;
   --font-mono: var(--font-fira-code), ui-monospace, "SFMono-Regular", monospace;
+
+  color-scheme: dark;
 }
 
 * {
@@ -43,6 +55,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 72px;
 }
 
 body {
@@ -51,19 +64,14 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--text);
-  background:
-    radial-gradient(
-      1200px 500px at 100% -10%,
-      rgba(14, 165, 233, 0.1),
-      transparent 60%
-    ),
-    var(--bg);
+  background: var(--bg);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* ---------- Topbar ---------- */
+/* ---------- Topbar (plano, separado por borde) ---------- */
 .topbar {
   display: flex;
   align-items: center;
@@ -71,9 +79,10 @@ body {
   gap: 16px;
   flex-wrap: wrap;
   padding: 14px 24px;
-  background: linear-gradient(180deg, #0e3358, var(--topbar));
-  color: #fff;
-  box-shadow: var(--shadow-md);
+  background: var(--bg);
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -83,7 +92,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 700;
+  color: var(--heading);
+  font-weight: 600;
   font-size: 1.15rem;
   letter-spacing: 0.01em;
 }
@@ -98,25 +108,33 @@ body {
 }
 
 .topbar nav a {
-  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
-  padding: 7px 13px;
-  border-radius: 999px;
-  transition:
-    color 0.18s ease,
-    background-color 0.18s ease;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  transition: color 0.16s ease;
 }
 
 .topbar nav a:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
 }
 
 .topbar nav a:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.6);
+  box-shadow: var(--ring);
+}
+
+/* Ruta activa: subrayado fino, sin fondo */
+.topbar nav a[aria-current="page"] {
+  color: var(--heading);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
 }
 
 /* ---------- Layout ---------- */
@@ -129,7 +147,8 @@ body {
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
+  font-weight: 600;
   line-height: 1.2;
   margin: 0 0 4px;
   color: var(--heading);
@@ -142,12 +161,60 @@ h1 {
   max-width: 65ch;
 }
 
+/* Encabezado de página (E1): el reloj flota a la derecha y el h1 de cada página,
+   que viene justo después en el flujo, queda en la misma fila a su izquierda */
+.page-head {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  float: right;
+  margin: 4px 0 0 16px;
+}
+
+.clock {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.clock svg {
+  align-self: center;
+  color: var(--muted);
+}
+
+.clock-time {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-date {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 /* ---------- KPI cards ---------- */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+}
+
+/* Bento: 12 columnas; la card de acento ocupa el doble */
+.cards.bento {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.bento .card {
+  grid-column: span 3;
+}
+
+.bento .card.accent {
+  grid-column: span 6;
 }
 
 .card {
@@ -155,41 +222,31 @@ h1 {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 18px 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 20px 22px;
+  box-shadow: none;
   overflow: hidden;
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--accent), var(--brand));
+  transition: border-color 0.16s ease;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border-color: var(--line-strong);
 }
 
 .card .card-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--brand);
+  color: var(--muted);
   margin-bottom: 6px;
 }
 
 .card .num {
   font-family: var(--font-mono);
-  font-size: 2.1rem;
-  font-weight: 600;
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 300;
   line-height: 1;
   color: var(--heading);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Tarjetas cuyo valor es un texto (ej. título de la última noticia). */
@@ -204,10 +261,27 @@ h1 {
 
 .card .lbl {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 6px;
+}
+
+/* Card de acento (una por pantalla): relleno salvia, texto oscuro */
+.card.accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.card.accent .card-head,
+.card.accent .num {
+  color: var(--on-accent);
+}
+
+.card.accent .lbl {
+  color: var(--on-accent);
+  opacity: 0.75;
 }
 
 /* ---------- Panels ---------- */
@@ -217,7 +291,7 @@ h1 {
   border-radius: var(--radius);
   padding: 22px 24px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .panel h2 {
@@ -225,12 +299,13 @@ h1 {
   align-items: center;
   gap: 9px;
   margin: 0 0 16px;
-  font-size: 1.12rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   color: var(--heading);
 }
 
 .panel h2 svg {
-  color: var(--brand);
+  color: var(--muted);
 }
 
 /* ---------- Tablas ---------- */
@@ -242,7 +317,9 @@ h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 480px;
+  /* Piso de ancho para que las columnas respiren; el resto lo resuelve
+     el scroll horizontal de .table-wrap */
+  min-width: 640px;
 }
 
 th,
@@ -254,15 +331,26 @@ td {
   vertical-align: middle;
 }
 
+td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Horas y fechas en tablas (U2): Fira Code, peso heredado.
+   nowrap: una fecha/hora nunca se parte en dos líneas. */
+.mono {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
 thead th {
   position: sticky;
   top: 0;
   color: var(--muted);
   font-weight: 600;
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  background: #f8fafc;
+  background: var(--panel);
   border-bottom: 1px solid var(--line);
 }
 
@@ -271,7 +359,7 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #f1f9ff;
+  background: var(--panel-2);
 }
 
 tbody tr:last-child td {
@@ -284,7 +372,7 @@ tbody tr:last-child td {
   align-items: center;
   gap: 5px;
   padding: 3px 10px 3px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 0.78rem;
   font-weight: 600;
   border: 1px solid transparent;
@@ -317,9 +405,9 @@ tbody tr:last-child td {
 }
 
 .badge.sev-media {
-  background: #fef3c7;
-  color: #b45309;
-  border-color: #fde68a;
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-color: var(--warn-border);
 }
 
 .badge.sev-alta {
@@ -330,7 +418,7 @@ tbody tr:last-child td {
 
 /* Etiqueta neutra (ej. categoría de denuncia) */
 .badge.neutral {
-  background: #f1f5f9;
+  background: var(--panel-2);
   color: var(--muted);
   border-color: var(--line);
 }
@@ -352,83 +440,121 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
+  min-height: 46px;
   padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font-size: 0.95rem;
-  font-family: inherit;
+  background: var(--panel-2);
   color: var(--text);
-  background: #fff;
+  border: 1px solid var(--line-input);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.95rem;
   transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
-input::placeholder {
-  color: #94a3b8;
+/* Misma altura exacta para input y select en una misma fila (el select
+   calculaba 2 px menos). textarea conserva solo min-height. */
+/* Solo campos de texto y selects; los controles de tipo casilla no se estiran */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
+    [type="file"]
+  ),
+select {
+  height: 46px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
 }
 
 input:hover,
-select:hover {
-  border-color: #cbd5e1;
+select:hover,
+textarea:hover {
+  border-color: var(--muted);
 }
 
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible {
   outline: none;
   border-color: var(--accent);
   box-shadow: var(--ring);
 }
 
-/* ---------- Botones ---------- */
-button {
+/* ---------- Botones (pill) ---------- */
+button,
+.button,
+.pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  background: var(--brand);
-  color: #fff;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  min-height: 44px;
   padding: 10px 18px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: inherit;
   font-size: 0.92rem;
   font-weight: 600;
-  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   transition:
-    background-color 0.18s ease,
-    box-shadow 0.18s ease,
-    opacity 0.18s ease;
+    background-color 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease,
+    opacity 0.16s ease,
+    transform 0.16s ease;
 }
 
-button:hover {
-  background: var(--brand-dark);
+button:hover,
+.button:hover,
+.pill:hover {
+  background: var(--heading);
 }
 
-button:focus-visible {
+button:active,
+.button:active,
+.pill:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+.button:focus-visible,
+.pill:focus-visible {
   outline: none;
   box-shadow: var(--ring);
 }
 
-button:disabled {
-  opacity: 0.65;
+button:disabled,
+.button:disabled,
+.pill:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
-button.ghost {
-  background: #fff;
-  color: var(--brand);
-  border: 1px solid #cbd5e1;
-  padding: 7px 13px;
-  font-size: 0.84rem;
+/* Variante outline */
+button.ghost,
+.button.ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+  padding: 8px 14px;
+  font-size: 0.86rem;
 }
 
-button.ghost:hover {
-  background: #eff6ff;
-  border-color: var(--brand);
-  color: var(--brand-dark);
+button.ghost:hover,
+.button.ghost:hover {
+  background: var(--panel-2);
+  border-color: var(--line-strong);
+  color: var(--heading);
 }
 
 /* Spinner para estados de carga en botones */
@@ -467,26 +593,19 @@ button.ghost:hover {
   gap: 14px;
 }
 
+/* Mini-card bordeada: el estado va solo en borde, texto e ícono (sin relleno) */
 .spot {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 16px 14px;
   text-align: center;
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.spot:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: none;
+  transition: border-color 0.16s ease;
 }
 
 .spot.is-busy {
@@ -499,7 +618,7 @@ button.ghost:hover {
 
 .spot .name {
   font-family: var(--font-mono);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.15rem;
   color: var(--heading);
 }
@@ -515,6 +634,11 @@ button.ghost:hover {
   margin-top: 6px;
 }
 
+.spot .button,
+.spot button {
+  margin-top: 8px;
+}
+
 /* ---------- Estado vacío ---------- */
 .empty {
   display: flex;
@@ -527,7 +651,7 @@ button.ghost:hover {
 }
 
 .empty svg {
-  color: #94a3b8;
+  color: var(--muted);
 }
 
 .empty p {
@@ -540,8 +664,10 @@ button.ghost:hover {
 
 /* ---------- Toasts (feedback de acciones) ---------- */
 .toast-viewport {
+  /* Abajo a la derecha: arriba se superponía con el reloj de .page-head */
   position: fixed;
-  top: 76px;
+  top: auto;
+  bottom: 20px;
   right: 20px;
   z-index: 100;
   display: flex;
@@ -556,25 +682,23 @@ button.ghost:hover {
   align-items: flex-start;
   gap: 10px;
   pointer-events: auto;
-  background: var(--panel);
+  background: var(--panel-2);
+  color: var(--text);
   border: 1px solid var(--line);
   border-left-width: 4px;
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   padding: 12px 12px 12px 14px;
   animation: toast-in 0.22s ease;
 }
 
 .toast.ok {
   border-left-color: var(--ok);
-  background: var(--ok-bg);
-  border-color: var(--ok-border);
 }
 
 .toast.error {
-  border-left-color: var(--busy);
-  background: var(--busy-bg);
   border-color: var(--busy-border);
+  border-left-color: var(--busy);
 }
 
 .toast-icon {
@@ -610,12 +734,16 @@ button.ghost:hover {
   word-break: break-word;
 }
 
+/* Declarado DESPUÉS de `button`: resetea la pill para el botón de cierre */
 .toast-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 2px;
+  /* 28x28 con el ícono de 16: objetivo táctil holgado (WCAG 2.2 2.5.8) */
+  min-height: 28px;
+  min-width: 28px;
+  padding: 6px;
   background: none;
   border: none;
   border-radius: 6px;
@@ -625,7 +753,12 @@ button.ghost:hover {
 }
 
 .toast-close:hover {
+  background: none;
   color: var(--heading);
+}
+
+.toast-close:active {
+  transform: none;
 }
 
 .toast-close:focus-visible {
@@ -644,12 +777,12 @@ button.ghost:hover {
   }
 }
 
-/* ---------- Footer (barra oscura slim, bookend del topbar) ---------- */
+/* ---------- Footer (plano, bookend del topbar) ---------- */
 .footer {
   flex-shrink: 0;
   margin-top: auto;
-  background: linear-gradient(180deg, var(--topbar), #0a2238);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg);
+  border-top: 1px solid var(--line);
 }
 
 .footer-inner {
@@ -664,7 +797,7 @@ button.ghost:hover {
 }
 
 .footer .brand {
-  color: #e2e8f0;
+  color: var(--muted);
   font-size: 0.95rem;
   font-weight: 600;
 }
@@ -674,12 +807,27 @@ button.ghost:hover {
 }
 
 .footer-copy {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--muted);
   font-size: 0.8rem;
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .bento .card {
+    grid-column: span 6;
+  }
+
+  .bento .card.accent {
+    grid-column: span 12;
+  }
+}
+
 @media (max-width: 600px) {
+  /* El topbar con la nav en segunda fila mide ≈ 114 px */
+  html {
+    scroll-padding-top: 120px;
+  }
+
   .container {
     padding: 24px 16px 56px;
   }
@@ -688,8 +836,47 @@ button.ghost:hover {
     padding: 12px 16px;
   }
 
+  /* Nav en fila con scroll horizontal (sin JS ni hamburguesa).
+     El padding/margin negativo evita que el overflow recorte el anillo de
+     foco (3 px); el fundido derecho avisa que la fila sigue. */
   .topbar nav {
     width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    padding: 4px 28px 4px 4px;
+    margin: -4px;
+    mask-image: linear-gradient(
+      90deg,
+      var(--bg) calc(100% - 28px),
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      var(--bg) calc(100% - 28px),
+      transparent
+    );
+  }
+
+  .topbar nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* En móvil el reloj no comparte fila: va en su propia línea sobre el h1 */
+  .page-head {
+    float: none;
+    margin: 0 0 4px;
+  }
+
+  .cards,
+  .cards.bento {
+    grid-template-columns: 1fr;
+  }
+
+  .bento .card,
+  .bento .card.accent {
+    grid-column: auto;
   }
 
   .footer-inner {
@@ -706,8 +893,12 @@ button.ghost:hover {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Queda el texto "Enviando…" estático */
+  .spinner {
+    display: none;
   }
 }
