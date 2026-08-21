@@ -17,3 +17,9 @@ __pycache__/
 
 # Config local de Claude Code (personal)
 .claude/settings.local.json
+
+# Skills de Leonxlnx/taste-skill (npx skills add) — solo local, no se versionan
+.agents/
+skills-lock.json
+.claude/skills/*
+!.claude/skills/nuevo-modulo/

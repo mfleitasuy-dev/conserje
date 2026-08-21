@@ -23,3 +23,4 @@ nuevos (`plan.md`) → se implementa con tests y se registra la **evidencia** (`
 | [`alertas-filtro`](./alertas-filtro/spec.v2.md) | Ejecutada |
 | [`resolver-denuncias`](./resolver-denuncias/spec.v2.md) | Ejecutada |
 | [`dashboard-resumen`](./dashboard-resumen/spec.v2.md) | Ejecutada |
+| [`redisenio-visual`](./redisenio-visual/spec.v2.md) | Pendiente (plan listo para ejecutar en sesión limpia) |
