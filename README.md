@@ -7,11 +7,31 @@ portería y un grupo de WhatsApp, en una sola pantalla de uso interno.
 Proyecto **capstone de BIOS 2026**: el producto es una web "normal" (sin IA adentro); lo que demuestra
 es **desarrollo asistido por IA bien hecho** — toda la capa de tooling de IA está versionada en el repo.
 
+## 🚀 Cómo correr
+
+Requisitos: Node 18+ y Postgres 16 local (`createdb`/`psql` en el PATH).
+
+```bash
+npm run setup && npm run dev   # http://localhost:3000
+```
+
+`npm run setup` es idempotente: instala dependencias, crea `.env` si falta, crea la base si no
+existe, aplica `db/schema.sql` y siembra `db/seed.sql` **solo si la base está vacía**. Nunca
+borra datos. Los tests no necesitan Postgres (usan `pg-mem`): `npm test`.
+
+## ✅ Entregable 3 — Demo Day
+
+| # | Qué | Dónde |
+|---|-----|-------|
+| 1 | Capstone funcionando en local (sin deploy) | `npm run setup && npm run dev` — flujo principal: dashboard → portería (ingreso) → cocheras → salida → alertas → denuncias |
+| 2 | Repo con todo el recorrido del curso, al día | E1 y E2 abajo; guion del pitch en [`docs/pitch.md`](./docs/pitch.md) |
+| 3 | ADR personal: plan de carrera a 90 días | [`docs/adr-personal.md`](./docs/adr-personal.md) — contexto → opciones → decisión → plan |
+
 ## 🎥 Video-demo (3 min)
 
 > **▶️ Ver demo:** _[pegar acá el link a YouTube/Vimeo]_
 
-## ✅ Los 5 entregables
+## ✅ Entregable 1 — Los 5 entregables
 
 | # | Entregable | Dónde |
 |---|------------|-------|
@@ -30,34 +50,17 @@ es **desarrollo asistido por IA bien hecho** — toda la capa de tooling de IA e
 | ADRs (template Nygard) | [`docs/architecture/adr/`](./docs/architecture/adr) |
 | `CLAUDE.md` actualizado | [`CLAUDE.md`](./CLAUDE.md) |
 | Subagentes (2) | [`.claude/agents/`](./.claude/agents) — `test-runner` y `ui-reviewer` |
-| Specs SDD ejecutadas (4) + planes + evidencia | [`specs/`](./specs) — visitas-filtro, alertas-filtro, resolver-denuncias, dashboard-resumen |
+| Specs SDD ejecutadas (5) + planes + evidencia | [`specs/`](./specs) — visitas-filtro, alertas-filtro, resolver-denuncias, dashboard-resumen, redisenio-visual |
 | Browser agent (Playwright + RCCF + costo) | [`docs/browser-agent/`](./docs/browser-agent) |
 
 ## 🧱 Stack
 
 Next.js 15 (App Router) · TypeScript · Postgres (`pg`) · Zod · Vitest (con `pg-mem`).
 
-## 🚀 Cómo correr
+## 🖥️ Pantallas
 
-Requisitos: Node 18+ y Postgres 16 (local).
-
-```bash
-# 1. Dependencias
-npm install
-
-# 2. Base de datos (ajustá DATABASE_URL si hace falta)
-createdb conserje   # o usá tu instancia
-cp .env.example .env
-npm run db:setup    # aplica db/schema.sql + db/seed.sql
-
-# 3. App
-npm run dev         # http://localhost:3000
-
-# 4. Tests (no necesitan Postgres: usan pg-mem)
-npm test
-```
-
-### Pantallas
+UI en **tema oscuro** (rediseño de agosto 2026, ver [`specs/redisenio-visual/`](./specs/redisenio-visual)):
+topbar con navegación, reloj en vivo y feedback de acciones con toasts.
 
 - **Dashboard** (`/`) — visitas, ocupación de cocheras, alertas activas, denuncias abiertas
   y última noticia.

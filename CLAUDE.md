@@ -30,7 +30,7 @@ app/
   noticias/             # publicar y listar noticias
   alertas/              # crear, listar y resolver alertas
   denuncias/            # registrar, listar y resolver denuncias
-  ui/                   # componentes compartidos (Toast)
+  ui/                   # componentes compartidos (Toast, Clock, NavLink)
   api/visits/route.ts   # GET (filtros fecha/unidad), POST (registrar)
   api/visits/[id]/exit/route.ts  # POST (marcar salida)
   api/parking/route.ts  # GET (cocheras+resumen), PATCH (asignar), DELETE (liberar)
@@ -54,12 +54,14 @@ db/                     # schema.sql, seed.sql
 mcp/                    # MCP server propio (consorcio-mcp)
 prompts/                # plantillas de prompt de desarrollo
 specs/                  # specs SDD por feature (v1 → gaps → v2 → plan → evidencia)
-docs/                   # architecture (C4 + adr con las decisiones), browser-agent (evidencia E2E)
+docs/                   # architecture (C4 + adr), browser-agent (evidencia E2E), adr-personal.md, pitch.md
+scripts/                # setup.sh (npm run setup)
 .claude/agents/         # subagentes: test-runner, ui-reviewer
 ```
 
 ## Comandos
 
+- `npm run setup` — setup idempotente (`scripts/setup.sh`): deps, `.env`, base, schema y seed solo si está vacía. Nunca borra datos.
 - `npm run dev` — Next en `http://localhost:3000`.
 - `npm run build` / `npm start` — build de producción y servidor.
 - `npm test` — corre la suite de Vitest una vez (`npm run test:watch` para modo watch).
