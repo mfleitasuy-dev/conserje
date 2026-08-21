@@ -13,16 +13,18 @@ criterio.
 
 **Dónde estoy hoy.**
 
-- **Experiencia:** entre 2 y 5 años como desarrollador de software, hoy en **Bantotal** (core
-  bancario construido sobre GeneXus), en relación de dependencia.
+- **Experiencia:** 5 años como desarrollador de software, hoy en **Bantotal** (core bancario
+  construido sobre GeneXus), en relación de dependencia.
 - **Stack:** GeneXus (9 y 16) como herramienta principal, con Java/.NET alrededor;
-  TypeScript/Next.js y Postgres los incorporé con el capstone.
+  TypeScript/Next.js y Postgres los incorporé durante el curso.
 - **Situación laboral:** estable. En la empresa las herramientas de IA para desarrollo **ya se
   usan**, así que no tengo que pelear el permiso: tengo que demostrar el impacto.
 - **Qué me llevo del curso:** un toolkit versionado de desarrollo asistido por IA que ya uso de
   verdad: `CLAUDE.md` con convenciones, plantillas de prompt, la skill `nuevo-modulo`, un MCP
   propio (`consorcio-mcp`), subagentes (`test-runner`, `ui-reviewer`), specs SDD ejecutadas con
-  evidencia, C4 y ADRs; y un capstone, **Conserje**, que lo demuestra de punta a punta. El
+  evidencia, C4 y ADRs. Las habilidades que practiqué de punta a punta: **especificar** con SDD
+  (spec → gaps → plan → evidencia), **diseñar** con C4 y ADRs, **construir** un MCP propio y
+  subagentes, y **verificar** con tests, QA automatizado en navegador y revisión de código. El
   aprendizaje central fue pasar de "pedirle código" a **especificar, delegar y verificar**, con el
   tooling (prompts, skills, MCPs, agentes) versionado en el repo para que se repita.
 - **Un activo que ya existe:** `genexus-mcp`, un proyecto personal que arranqué el 9 de julio de
@@ -51,12 +53,13 @@ el impacto.
   personal que se usa en el trabajo.
 - **Aplica:** sí. Es el camino más corto entre lo que tengo y un resultado medible.
 
-### Opción B — Buscar un rol nuevo usando el portafolio (Conserje + toolkit)
+### Opción B — Buscar un rol nuevo usando las habilidades del curso como portafolio
 
-Posicionarme para roles full-stack o de "AI-assisted engineering" con el repo como carta de
-presentación.
+Posicionarme para roles full-stack o de "AI-assisted engineering" con las habilidades
+demostradas (SDD, MCP propio, subagentes, arquitectura documentada) como carta de presentación.
 
-- **Pros:** posible salto salarial y de seniority; el capstone es evidencia concreta.
+- **Pros:** posible salto salarial y de seniority; hay evidencia concreta (specs ejecutadas,
+  MCP, agentes, ADRs) y no solo un CV.
 - **Contras:** una búsqueda seria consume más de 4 h/semana (entrevistas, pruebas técnicas); mi
   ventaja diferencial hoy está en GeneXus + IA, no en TypeScript.
 - **Aplica:** no ahora. El empleo es estable y el apalancamiento está en el stack actual.
@@ -107,12 +110,13 @@ a ser la candidata).
 - Tengo un criterio explícito (hitos con fecha y evidencia) para saber si voy bien.
 - `genexus-mcp` pasa de herramienta personal a caso medido dentro de una empresa real, que es el
   activo que cualquiera de las tres opciones necesita después.
-- El toolkit del curso (convenciones, prompts, SDD) se aplica en un equipo GeneXus, no solo en el
-  capstone.
+- Las habilidades del curso (convenciones, prompts, SDD, MCP, agentes) se aplican en un equipo
+  GeneXus real, no solo en un proyecto de estudio.
 
 ### Negativas
 
 - Durante 90 días no invierto en búsqueda laboral ni en comercializar el proyecto.
-- Conserje queda como está (MVP sin auth); el roadmap del capstone espera.
+- Las habilidades de frontend (TypeScript/Next.js) que sumé en el curso quedan en segundo plano
+  frente a GeneXus durante estos 90 días.
 - Dependo de una decisión de Bantotal (hito 1 del mes 1): si no habilitan el uso, el plan cambia
   de vía y lo registro en un nuevo ADR.
